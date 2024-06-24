@@ -88,3 +88,30 @@ Registered User: Authenticated users who have created an account and logged in
 
 - As a registered user, I want to share recipes I like to my friends via text, link sharing, email, etc..
 
+----------------------------------------------------------------------------
+
+## Server Endpoints:
+| HTTP Verb | Name | Description | User Story | 
+------------|------|-------------|------------|
+POST | LogIn | Logs in an existing user.| 10
+POST | SignUp| Registers a new user. |10
+POST | LogOut | Logs out the current user.| 10
+GET | users | Retrieves the profile information of a user.| 9
+PUT | users | Updates the profile information of a user | 9
+GET | recipe_search | Searches for recipes based on query parameters. |1
+GET | recipe | Retrieves details of a specific recipe. | 2
+GET | recipe_popular | Retrieves a list of popular recipes. | 3
+GET | recipr_filter | Filters recipes by dietary preferences. | 4
+POST | meal_plans | Creates a new meal plan for the user. | 6
+GET | meal_plans | Retrieves all meal plans for a specific user. | 6
+PUT | meal_plans | Updates a specific meal plan | 8
+DELETE | meal_plans | Deletes a specific meal plan. | 8
+POST | shopping_list | Generates a shopping list based on a meal plan. | 7
+GET | shopping_list | Retrieves a specific shopping list. | 7
+PUT | shopping_list | Updates a specific shopping list. | 7 
+DELETE | shopping_list | Deletes a specific shopping list. | 7
+POST | recipes_share | Shares a recipe with others via various methods. | 11
+
+
+
+
