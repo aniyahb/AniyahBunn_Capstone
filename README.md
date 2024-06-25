@@ -88,6 +88,11 @@ Registered User: Authenticated users who have created an account and logged in
 
 - As a registered user, I want to share recipes I like to my friends via text, link sharing, email, etc..
 
+
+----------------------------------------------------------------------------
+
+
+
 ----------------------------------------------------------------------------
 
 ## Server Endpoints:
