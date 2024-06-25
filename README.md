@@ -90,6 +90,18 @@ Registered User: Authenticated users who have created an account and logged in
 
 
 ----------------------------------------------------------------------------
+## Screen Archetypes
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/b5b723f5-023d-4f91-820d-af0cbb560920" width="400" height="200">
+
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/8ea3b187-3769-4b3a-8d3d-f1cea8409fdd" width="400" height="200">
+
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/bc9fc72c-e0ea-4e0d-92e6-74f016cebba4" width="400" height="200">
+
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/aa08f230-ff48-494f-868f-a96c874a25c5" width="400" height="200">
+
+
+
+
 
 
 
