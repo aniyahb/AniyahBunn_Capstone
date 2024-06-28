@@ -1,4 +1,4 @@
-.recipe-card{
+.recipeCard{
     background-color: rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
     color: white;
 }
 
-.recipe-card:hover{
+.recipeCard:hover{
     background-color: rgb(72, 69, 70);
     transform: scale(1.02);
 
@@ -36,7 +36,7 @@
 
 }
 
-.favorite_icon{
+.favoriteIcon{
     display: flex;
     flex-direction: row;
     font-size: 25px;
@@ -59,7 +59,7 @@
 
 }
 
-.UnderName{
+.underName{
     display: flex;
     gap: 240px;
 

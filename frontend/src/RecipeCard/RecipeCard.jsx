@@ -7,14 +7,14 @@ const RecipeCard = (props) => {
 
     return (
 
-        <div className="recipe-card" onClick={props.handleClickFunc}>
+        <div className="recipeCard" onClick={props.handleClickFunc}>
             <section>
                 <img className ="image" src= {filler_img} />
                 <h2 className = "recipeName" > Recipe Name </h2>
-                <div className='UnderName'>
+                <div className='underName'>
                 <h3 className= "serving"> Servings: </h3>
-                <div className= "fav_recipe">
-                    <a className= "favorite_icon" onClick={(e) => {
+                <div className= "favRecipe">
+                    <a className= "favoriteIcon" onClick={(e) => {
                             e.stopPropagation();
                             setIsFav(!isFav);
                             }}>
