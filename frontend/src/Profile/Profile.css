@@ -1,0 +1,17 @@
+.profileButton{
+    background-color: white;
+    font-family: Didot, serif;
+    color: rgb(6, 6, 6);
+    gap: 50px;
+    padding: 4px;
+    height: 25%;
+    width: 5%;
+    font-size: medium;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 65px;
+    margin-right: 40px;
+
+}

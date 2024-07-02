@@ -1,9 +1,7 @@
-
-.body{
+.signUpBody{
     display:flex;
     flex-direction: column;
     margin:auto;
-    /* margin-top: 200px; */
     background: rgb(255, 255, 255);
     padding-bottom: 30px;
     position: absolute;
@@ -11,129 +9,9 @@
     left: 0;
     width: 100%;
     height: 100vh;
-
 }
 
-.container{
-
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    padding:10px;
-
-
-}
-
-
-.header{
-    font-family: Didot, serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 9px;
-    width: 100%;
-    margin-top: 30px;
-}
-
-.lable{
-    font-family: Didot, serif;
-    color:green;
-    font-size:48px;
-    font-weight:700;
-
-}
-
-.underline{
-    width:61px;
-    height: 4px;
-    background: green;
-    border-radius: 9px;
-
-}
-
-.SignUp-inputs{
-    font-family: Didot, serif;
-    margin-top: 55px;
-    display:flex;
-    flex-direction: column;
-    gap:25px;
-}
-
-.input{
-
-    display:flex;
-    align-items:center;
-    margin:auto;
-    width:480px;
-    height:80px;
-    background: rgb(199, 203, 200);
-    border-radius: 6px;
-
-
-}
-
-
-.input img{
-    margin: 0px 30px;
-}
-
-.input input{
-    font-family: Didot, serif;
-    height:50px;
-    width:400px;
-    background: transparent;
-    border:none;
-    outline:none;
-    color:#797979;
-    font-size: 19px;
-
-
-}
-
-.ForgotPassword{
-    padding-left: 5px;
-    margin-top: 27px;
-    color:#797979;
-    font-size: 18px;
-}
-
-.ForgotPassword span{
-    color:green;
-    cursor:pointer;
-
-
-
-}
-
-.submit-container{
-    display: flex;
-    gap:30px;
-    margin:60px auto;
-
-}
-
-.submit{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width:220px;
-    height:59px;
-    color: #fff;
-    background: green;
-    border-radius:50px;
-    font-size: 19px;
-    font-weight:700;
-    cursor:pointer;
-
-}
-
-.gray{
-    background: rgb(232, 230, 230);
-    color:grey;
-}
-
-.title{
+.signUpTitle{
     height:55px;
     box-shadow: 0px 0.5px 2px ;
     background-color: rgb(255, 253, 253);
@@ -143,16 +21,77 @@
     padding: 20px;
 }
 
-.logInButton{
-    background-color: white;
+.signUpContainer{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    padding:10px;
+}
+
+.signUpHeader{
+    font-family: Didot, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.signUpLable{
+    font-family: Didot, serif;
+    color:green;
+    font-size:48px;
+    font-weight:700;
+}
+
+.signUpUnderline{
+    width:61px;
+    height: 4px;
+    background: green;
+    border-radius: 9px;
+}
+
+.signUpInputs{
+    font-family: Didot, serif;
+    margin-top: 55px;
+    display:flex;
+    flex-direction: column;
+    gap:25px;
+}
+
+.signUpInputs img{
+    margin: 0px 30px;
+}
+
+.signUpInputs input{
+    font-family: Didot, serif;
+    height:50px;
+    width:400px;
+    background: transparent;
+    border:none;
+    outline:none;
+    color:#797979;
+    font-size: 19px;
+}
+
+.existingAccount{
+    padding-left: 5px;
+    margin-top: 27px;
+    color:#797979;
+    font-size: 18px;
+}
+
+.logInLink{
+    color:green;
+    cursor:pointer;
+}
+
+
+.signUpButton{
+    background-color: green;
     border-radius:50px;
     padding: 7px;
     border-style: none;
-
-}
-
-.signUpButton{
-    background-color: white;
-    border-radius:50px;
-    padding: 7px;
 }
