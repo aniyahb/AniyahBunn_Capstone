@@ -1,15 +1,16 @@
 import './LogIn.css'
 import React, { useState, useContext, createContext} from "react";
-import {useNavigate,Link} from "react-router-dom"
+import { Link } from 'react-router-dom'
+import {useNavigate} from "react-router-dom"
 // import  {UserContext}  from '../UserContext'
-import password_icon from '../assets/password.png'
-import email_icon from '../assets/email.png'
+
 
 function LogIn(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
     // const {updateUser} = useContext(UserContext);
 
 
@@ -24,23 +25,26 @@ function LogIn(){
 
         try{
             setLoading(true);
-            const response = await fetch("http://localhost:2500/logIn",{
+            const response = await fetch("http://127.0.0.1:2500/logIn",{
                 method:"POST",
                 headers:{
                     "Content-Type": "application/json",
                 },
-                body:Json.stringify({
+                body:JSON.stringify({
                     email,
                     password,
                 }),
                 credentials: 'include'
             });
+            console.log(response )
             if(response.ok){
                 const data = await response.json();
                 const loggedInUser = data.user;
                 // updateUser(loggedInUser);
+                navigate("/HomePage")
             }else{
                 setError('Login Failed')
+
             }
         }   catch(error){
             setError('An error occured');
@@ -60,7 +64,7 @@ function LogIn(){
                 </div>
                     <form onSubmit={handleLogIn}>
                         <div className='logInInputs'>
-                            <img src={email_icon} alt=""/>
+
                             <input
                                 type='email'
                                 placeholder='Email'
@@ -68,7 +72,7 @@ function LogIn(){
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-                            <img src={password_icon} alt=""/>
+
                             <input
                                 type='password'
                                 placeholder='Password'
