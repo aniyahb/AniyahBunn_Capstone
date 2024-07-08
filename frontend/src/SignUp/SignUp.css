@@ -12,12 +12,12 @@
 }
 
 .signUpTitle{
-    height:55px;
+    height:30px;
     box-shadow: 0px 0.5px 2px ;
     background-color: rgb(255, 253, 253);
     font-family: Didot, serif;
     color: #171717;
-    font-size: 55px;
+    font-size: 30px;
     padding: 20px;
 }
 
@@ -37,61 +37,83 @@
     gap: 9px;
     width: 100%;
     margin-top: 30px;
+
 }
 
 .signUpLable{
     font-family: Didot, serif;
     color:green;
-    font-size:48px;
+    font-size:40px;
     font-weight:700;
 }
 
 .signUpUnderline{
     width:61px;
-    height: 4px;
+    height: 2.5px;
     background: green;
     border-radius: 9px;
 }
 
 .signUpInputs{
     font-family: Didot, serif;
-    margin-top: 55px;
+    margin-top: 20px;
     display:flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap:25px;
 }
 
 .signUpInputs img{
-    margin: 0px 30px;
+    margin: 0px ;
+    height:15px;
 }
 
 .signUpInputs input{
     font-family: Didot, serif;
     height:50px;
-    width:400px;
-    background: transparent;
+    width:300px;
+    /* background: transparent; */
+    background-color: #aeacac;
     border:none;
     outline:none;
-    color:#797979;
-    font-size: 19px;
+    color:#030303;
+    font-size: 10px;
+    /* right: 300px; */
+    border-radius: 4px;
 }
 
+.signUpInputs ::placeholder{
+    color: black;
+    padding-left: 10px;
+}
+
+
 .existingAccount{
+    font-family: Didot, serif;
     padding-left: 5px;
     margin-top: 27px;
     color:#797979;
-    font-size: 18px;
+    font-size: 10px;
+
+}
+p{
+    font-family: Didot, serif;
+    font-size: 10px;
 }
 
 .logInLink{
     color:green;
     cursor:pointer;
+    font-family: Didot, serif;
 }
 
 
 .signUpButton{
-    background-color: green;
-    border-radius:50px;
+    background-color: rgb(2, 117, 2);
+    border-radius:5px;
     padding: 7px;
     border-style: none;
+    font-family: Didot, serif;
+    color:white;
+    margin-left: 40%;
+    font-size: 60%;
 }

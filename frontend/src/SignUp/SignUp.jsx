@@ -1,9 +1,7 @@
 import './SignUp.css'
 import React, { useContext, useState } from "react";
-import {useNavigate,Link} from "react-router-dom"
-import user_icon from '../assets/person.png'
-import email_icon from '../assets/email.png'
-import password_icon from '../assets/password.png'
+import {useNavigate,Link,Router} from "react-router-dom"
+
 
 
 function SignUp(){
@@ -12,43 +10,61 @@ function SignUp(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const {updateUser} = useContext(UserContext)
+    const [error, setError] = useState('')
+
 
 
     async function handleSignUp(event){
         event.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            alert(error)
+            return;
+        }
+
+
+
         try{
-            const response = await fetch("http://localhost:2500/logIn",{
+            const response = await fetch("http://localhost:2500/signUp",{
                 method:"POST",
                 headers:{
                     "Content-Type": "application/json",
                 },
-                body:Json.stringify({
+                body:JSON.stringify({
                     name,
                     email,
                     password,
                     confirmPassword,
-                    role,
                 }),
                 credentials: 'include'
             });
+            console.log(response)
             const data = await response.json()
             if(response.ok){
-                const loggedInUser = data.user
-                updateUser(loggendInUser)
-                navigate('/projects')
+                goToHomepage()
             } else{
-                setError('Login failed')
+                setError('Registration failed')
+                alert(error)
             }
             if (data.error){
+                console.log(data.error)
+                setError(data.error);
                 alert(data.error)
             }
     }       catch(error){
             console.log(error)
+            setError(data.error);
+            alert(data.error)
+            }
     }
-}
+
     function goToLogin(){
         navigate('/logIn')
+    }
+
+    function goToHomepage(){
+        navigate('/HomePage')
     }
 
 //_________________________________________________________________
@@ -70,7 +86,9 @@ function SignUp(){
                             onChange={(e) => setName(e.target.value)}
                             required
                             />
-                        <img src={email_icon} alt=""/>
+                    </div>
+
+                    <div className='signUpInputs'>
                         <input
                             type='email'
                             placeholder='Email'
@@ -78,7 +96,9 @@ function SignUp(){
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             />
-                        <img src={password_icon} alt=""/>
+                    </div>
+
+                    <div className='signUpInputs'>
                         <input
                             type='password'
                             placeholder='Password'
@@ -86,7 +106,9 @@ function SignUp(){
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             />
-                        <img src={password_icon} alt=""/>
+                    </div>
+
+                    <div className='signUpInputs'>
                         <input
                             type='password'
                             placeholder='Confirm Password'
@@ -95,19 +117,20 @@ function SignUp(){
                             required
                             />
                     </div>
+
                         <p className='existingccount'>
                             Already Have An Account?{' '}
                             <a className='logInLink' onClick={goToLogin}>
                                 Login
                             </a>
                         </p>
-                        <button className='signUpButton'>Get Started</button>
+                        <button className='signUpButton'>Sign Up</button>
                     </form>
                 </div>
 
     </div>
     )
 
-}
+    }
 
 export default SignUp;
