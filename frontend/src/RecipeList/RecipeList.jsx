@@ -3,30 +3,31 @@ import './RecipeList.css';
 import RecipeCard from "../RecipeCard/RecipeCard";
 import Modal from "../Modal/Modal";
 
-
-
-
-
 const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
-    const [page, setPage] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
     const [pickedRecipe, setPickedRecipe] = useState(null);
+    const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState('Popular');
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("");2
     const [url, setUrl] = useState('')
 
-
-
     useEffect(() => {
-        const getPopular = async () => {
-            const api = await fetch(`https://api.spoonacular.com/recipes/random?number=1&apiKey=${import.meta.env.VITE_API_KEY}`);
-            const result = await api.json();
-            setPopular(result.recipes);
+        const fetchRecipes = async () => {
+            try {
+                const response = await fetch('http://localhost:2500');
+                if (!response.ok) {
+                    throw new Error('Failed to get recipes');
+                }
+                const data = await response.json();
+                setPopular(data);
+            } catch (error) {
+                console.error('Error fetching recipes:', error.message);
+            }
         };
 
-        getPopular();
-    },);
+        fetchRecipes();
+    }, []);
 
     const handlePickedRecipe = (recipe) => {
         setPickedRecipe(recipe);
@@ -40,7 +41,6 @@ const RecipeList = () =>{
                 {popular.map((recipe, index) => (
                     <RecipeCard
                     key={recipe.id}
-
                     title={recipe.title}
                     image={recipe.image}
                     cuisine={recipe.cuisine}
