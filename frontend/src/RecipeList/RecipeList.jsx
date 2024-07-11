@@ -2,6 +2,7 @@ import { useState, useEffect  } from "react";
 import './RecipeList.css';
 import RecipeCard from "../RecipeCard/RecipeCard";
 import Modal from "../Modal/Modal";
+import missingImage from "../assets/missing_img.png";
 
 const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
@@ -9,18 +10,19 @@ const RecipeList = () =>{
     const [pickedRecipe, setPickedRecipe] = useState(null);
     const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState('Popular');
-    const [search, setSearch] = useState("");2
+    const [search, setSearch] = useState("");
     const [url, setUrl] = useState('')
 
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const response = await fetch('http://localhost:2500');
+                const response = await fetch(`https://api.spoonacular.com/recipes/random?number=24&apiKey=${import.meta.env.VITE_API_KEY}`);
                 if (!response.ok) {
                     throw new Error('Failed to get recipes');
                 }
                 const data = await response.json();
-                setPopular(data);
+                setPopular(data.recipes);
+
             } catch (error) {
                 console.error('Error fetching recipes:', error.message);
             }
@@ -29,36 +31,44 @@ const RecipeList = () =>{
         fetchRecipes();
     }, []);
 
-    const handlePickedRecipe = (recipe) => {
+
+    const handlePickedRecipe = (id) => {
+        const recipe = popular.find(recipe => recipe.id === id);
         setPickedRecipe(recipe);
         setModalOpen(true);
     };
 
-    function renderRecipeCard(recipe,idex){
+    const handleCloseModal = () => {
+        setModalOpen(modalOpen);
+    };
 
-        return (
-            <div className="recipe-list">
-                {popular.map((recipe, index) => (
-                    <RecipeCard
-                    key={recipe.id}
-                    title={recipe.title}
-                    image={recipe.image}
-                    cuisine={recipe.cuisine}
-                    handlePickedRecipe={() => handlePickedRecipe(recipe)}
-                    />
-                    ))}
-            {modalOpen && <Modal recipe={pickedRecipe} closeModal={() => setModalOpen(false)} />}
-            </div>
-        );
-
+    const handleOpenModal = (recipe) => {
+        setModalOpen(!modalOpen)
+        setPickedRecipe(recipe)
     }
 
-        return(
-            <div className="recipeList">
-                {
-                popular.map(renderRecipeCard)
-                }
+        return (
+
+            <>
+        {modalOpen && pickedRecipe && <Modal showModal={handleOpenModal} pickedRecipe={pickedRecipe} closeModal={handleCloseModal}/>}
+            <div className="recipe-list">
+                {popular.map((recipe) => (
+                    <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        setPickedRecipe={setPickedRecipe}
+                        title={recipe.title}
+                        image={recipe.image || missingImage}
+                        cuisines={recipe.cuisines}
+                        handlePickedRecipe={() => handlePickedRecipe(recipe.id)}
+                        setModalOpen={setModalOpen}
+                    />
+                    ))}
+
             </div>
-        )
+            </>
+        );
+
+
 }
 export default RecipeList;
