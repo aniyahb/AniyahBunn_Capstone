@@ -4,16 +4,16 @@ const bcrypt = require('bcrypt')
 const {PrismaClient} = require('@prisma/client')
 const prisma = new PrismaClient
 const app = express()
-const cors = require('cors')
-
 const PORT = process.env.PORT || 2500
 app.use(express.json())
+const cors = require('cors')
+
+
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }))
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 // Sign Up Endpoint
 app.post('/signup', async (req, res) => {
@@ -26,6 +26,7 @@ app.post('/signup', async (req, res) => {
         console.log(`Email already exists please login.`);
         return res.json({error: 'Email already exists'});
 
+
     } else {
         if(password ===  confirmPassword) {
             const hashedPassword = await bcrypt.hash(password,10);
@@ -35,13 +36,10 @@ app.post('/signup', async (req, res) => {
                 });
                 res.status(201).json(user);
             }catch (error){
-                // res.status(400).json({error: 'Email already exists'});
                 console.error('Error creating user:', error);
                 if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
-                    // Unique constraint failed on email field
-                    return res.status(400).json({ error: 'Email already exists' });
+                    return res.status(400).json({ error: 'Email already exists. Please Login ' });
                 } else {
-                    // Handle other errors appropriately
                     return res.status(500).json({ error: 'Failed to create user' });
                 }
             }
@@ -72,41 +70,10 @@ app.post('/logout', (req,res) =>{
     })
 })
 
-// Popular Recipes Fetch
+
 app.get('/', async (req, res) => {
-    try {
-        const apiResponse = await fetch(`https://api.spoonacular.com/recipes/random?number=5&apiKey=${import.meta.env.VITE_API_KEY}`);
-        const { recipes } = await apiResponse.json();
-        res.json(recipes);
-        if (!apiResponse.ok) {
-            throw new Error(`Failed to fetch recipes from API: ${apiResponse.status} - ${apiResponse.statusText}`);
-        }
-        const createdRecipes = await Promise.all(
-                recipes.map(recipe => {
-                    return prisma.recipe.create({
-                        data: {
-                            title: recipe.title,
-                            image: recipe.image,
-                            cuisine: recipe.cuisine,
-                            ingredients: recipe.ingredients,
-                            instructions: recipe.instructions,
-                        }
-                    });
-
-                })
-            );
-
-    } catch (error) {
-        console.error('Error fetching recipes:', error);
-        res.status(500).json({ error: 'Failed to fetch recipes' });
-    }
+    res.send(`Welcome to Aniyah's Capstone!`);
 });
-
-
-
-// app.get('/', async (req, res) => {
-//     res.send(`Welcome to Aniyah's Capstone!`);
-// });
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
