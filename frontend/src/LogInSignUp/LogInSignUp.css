@@ -96,9 +96,6 @@
     margin-top: 27px;
     color:#797979;
     font-size: 18px;
-
-
-
 }
 
 .ForgotPassword span{
@@ -144,4 +141,18 @@
     color: #171717;
     font-size: 55px;
     padding: 20px;
+}
+
+.logInButton{
+    background-color: white;
+    border-radius:50px;
+    padding: 7px;
+    border-style: none;
+
+}
+
+.signUpButton{
+    background-color: white;
+    border-radius:50px;
+    padding: 7px;
 }

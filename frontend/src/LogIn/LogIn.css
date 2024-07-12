@@ -1,0 +1,131 @@
+.logInBody{
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    background: rgb(255, 255, 255);
+    padding-bottom: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+.logInTitle{
+    height:30px;
+    box-shadow: 0px 0.5px 2px ;
+    background-color: rgb(255, 253, 253);
+    font-family: Didot, serif;
+    color: #171717;
+    font-size: 30px;
+    padding: 20px;
+}
+
+.logInContainer{
+
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    padding:10px;
+    height: 55%;
+}
+
+.logInHeader{
+    font-family: Didot, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.logInLable{
+    font-family: Didot, serif;
+    color:green;
+    font-size:35px;
+    font-weight:700;
+}
+
+.logInUnderline{
+    width:61px;
+    height: 2.5px;
+    background: green;
+    border-radius: 9px;
+}
+
+.logInInputs{
+    font-family: Didot, serif;
+    margin-top: 20px;
+    display:flex;
+    flex-direction: column;
+    gap:25px;
+
+}
+
+.logInInputs img{
+    margin: 0px 30px;
+}
+
+.logInInputs input{
+    font-family: Didot, serif;
+    height:50px;
+    width:250px;
+    /* background: transparent; */
+    background-color: #aeacac;
+    border:none;
+    outline:none;
+    color:#030303;
+    font-size: 10px;
+    /* right: 300px; */
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.signUpLink{
+    color:green;
+    cursor:pointer;
+    font-family: Didot, serif;
+}
+
+p{
+    font-family: Didot, serif;
+    font-size: 10px;
+}
+
+.newAccount{
+    font-family: Didot, serif;
+    padding-left: 5px;
+    margin-top: 15px;
+    color:#797979;
+    font-size: 10px;
+}
+
+.logInButton{
+    background-color: rgb(2, 117, 2);
+    border-radius:5px;
+    padding: 7px;
+    border-style: none;
+    font-family: Didot, serif;
+    color:white;
+    margin-left: 40%;
+    font-size: 60%;
+
+}
+
+.signUpLink{
+    color:green;
+    cursor:pointer;
+    font-family: Didot, serif;
+}
+
+.error{
+    font-family: Didot, serif;
+    font-size: 13px;
+    color:rgb(171, 6, 6);
+    margin-top:5px;
+
+
+
+}
