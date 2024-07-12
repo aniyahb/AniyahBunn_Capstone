@@ -8,7 +8,6 @@ const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [pickedRecipe, setPickedRecipe] = useState(null);
-    const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState('Popular');
     const [search, setSearch] = useState("");
     const [url, setUrl] = useState('')
@@ -16,7 +15,7 @@ const RecipeList = () =>{
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const response = await fetch(`https://api.spoonacular.com/recipes/random?number=24&apiKey=${import.meta.env.VITE_API_KEY}`);
+                const response = await fetch(`https://api.spoonacular.com/recipes/random?number=60&apiKey=${import.meta.env.VITE_API_KEY}`) ;
                 if (!response.ok) {
                     throw new Error('Failed to get recipes');
                 }

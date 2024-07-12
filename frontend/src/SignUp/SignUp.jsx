@@ -24,9 +24,8 @@ function SignUp(){
         }
 
 
-
         try{
-            const response = await fetch("http://localhost:2500/signUp",{
+            const response = await fetch("http://localhost:2500/signup",{
                 method:"POST",
                 headers:{
                     "Content-Type": "application/json",
@@ -45,7 +44,7 @@ function SignUp(){
                 goToHomepage()
             } else{
                 setError('Registration failed')
-                alert(error)
+
             }
             if (data.error){
                 console.log(data.error)

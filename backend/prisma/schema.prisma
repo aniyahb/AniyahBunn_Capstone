@@ -19,3 +19,13 @@ model user{
   email     String   @unique
   password  String
 }
+
+model recipe {
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String
+  cuisine   String
+  ingredients String
+  instructions String
+  createdAt DateTime @default(now())
+}
