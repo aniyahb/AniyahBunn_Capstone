@@ -2,7 +2,7 @@ import { useState, useEffect  } from "react";
 import './RecipeList.css';
 import RecipeCard from "../RecipeCard/RecipeCard";
 import Modal from "../Modal/Modal";
-import missingImage from "../assets/missing_img.png";
+import missingImage from "../assets/placeholder_img.jpeg";
 
 const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
