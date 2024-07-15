@@ -1,25 +1,31 @@
-import { useState } from 'react'
-import { Link, BrowserRouter } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { Link, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
-import SearchBar from './SearchBar/SearchBar'
-import LogInSignUp from './LogInSignUp/LogInSignUp'
-import Profile from './Profile/Profile'
+import HomePage from './HomePage/HomePage';
+import LogIn from './LogIn/LogIn';
+import SignUp from './SignUp/SignUp';
 
 
 
+const App = () => {
+  return (
+    <div>
 
-function App() {
+      <Router>
+      <Routes>
 
-  return(
-    <header className='App-Header'>
-      <h1>MealMaster<span><Profile/></span></h1>
-    <SearchBar/>
-    </header>
+          <Route path='/' element={<SignUp />}/>
+          <Route path="/signUp" element={<SignUp/>} />
+          <Route path="/homepage" element={<HomePage/>} />
+          <Route path="/logIn" element={<LogIn/>} />
 
+      </Routes>
+    </Router>
 
+    </div>
 
+  );
+};
 
-  )
-}
 
 export default App

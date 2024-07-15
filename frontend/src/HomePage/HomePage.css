@@ -1,0 +1,38 @@
+.homepageBody {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 20px;
+
+
+}
+
+.homePageHeader {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.recipeList {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.homePageTitle{
+    margin: 0px;
+    height:30px;
+    font-family: Didot, serif;
+    color: #171717;
+    font-size: 32px;
+    padding: 20px;
+
+
+
+
+}

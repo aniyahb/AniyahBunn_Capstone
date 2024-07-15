@@ -4,10 +4,20 @@
     flex-direction: column;
     padding:  10px;
     margin: 10px;
-    border-radius: 20px;
-    width: 400px;
+    border-radius: 15px;
+    height: 240px;
+    width: 200px;
     align-items: center;
     color: white;
+
+}
+
+.recipeContent{
+    height: 280px;
+    width: 195px;
+    font-family: Didot, serif;
+    position: relative;
+
 }
 
 .recipeCard:hover{
@@ -17,10 +27,13 @@
 }
 
 .image{
-    height: 550px;
-    width: 400px;
+    height: 170px;
+    width: 195px;
     border-radius: 10px;
     flex-flow: wrap;
+    justify-content: center;
+    align-items: center;
+
 
 
 
@@ -31,19 +44,19 @@
     margin:0px;
     background-color: rgb(0, 0, 0);
     font-family: Didot, serif;
-
-
-
+    font-size: 10%;
+    width:200px;
 }
+
 
 .favoriteIcon{
     display: flex;
     flex-direction: row;
-    font-size: 25px;
+    font-size: 13px;
     gap:5px;
     justify-content:space-between;
-    padding-left: 15qpx;
-    padding:20px;
+    margin-left: 20px;
+    padding:5px;
 
 
 
@@ -52,15 +65,25 @@
     color:red;
 }
 
-.serving{
-    padding-left: 10px;
+.cuisine{
+
     font-family: Didot, serif;
+    font-size: 35% ;
 
 
 }
 
 .underName{
     display: flex;
-    gap: 240px;
+    margin-top:15px;
+    gap: 120px;
+    position: absolute;
+    bottom: 0;
 
+}
+
+.recipe-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }

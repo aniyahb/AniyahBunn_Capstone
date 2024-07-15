@@ -1,6 +1,6 @@
 import React from "react";
 import './Modal.css';
-import missingImage from "../assets/missing_img.png";
+import missingImage from "../assets/placeholder_img.jpeg";
 import RecipeList from "../RecipeList/RecipeList.jsx";
 
 const Modal = (props) => {
