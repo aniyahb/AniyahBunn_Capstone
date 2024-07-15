@@ -40,17 +40,6 @@ Meal Planner
 - Management: Allow editing, adding, and removing meals from the planner.
 - Integration: Link with saved recipes to seamlessly add recipes to the meal plan.
 
-
-**Stretch Features**
-
-Shopping List
-- Functionality: Automatically generate a shopping list based on selected recipes and meal plans.
-- Customization: Allow users to modify the shopping list by adding, removing, or editing items.
-
-Social Sharing
-Functionality: Integrate sharing options for users to share recipes and meal plans with friends and family.
-
-
 ----------------------------------------------------------------------------
 
 
@@ -64,8 +53,6 @@ Registered User: Authenticated users who have created an account and logged in
 - All guest user abilities 
 - Save favorite recipes 
 - Create and manage meal plans 
-- Generate and manage shopping lists 
-- Access and edit profile and preferences
 
 ----------------------------------------------------------------------------
 
@@ -82,16 +69,9 @@ Registered User: Authenticated users who have created an account and logged in
 
 - As a registered user, I want to create meal plans for the week so that I can organize my meals ahead of time.
 
-- As a registered user, I want to generate a shopping list based on my meal plan so that I can have all the ingredientsI need.
-
 - As a registered user, I want to edit my meal plan so that I can make changes if needed.
 
-- As a registered user, I want to access my profile to update my personal information and preferences.
-
 - As a registered user, I want to log in and out of my account securely so that my personal data is protected. 
-
-- As a registered user, I want to share recipes I like to my friends via text, link sharing, email, etc..
-
 
 ----------------------------------------------------------------------------
 ## Screen Archetypes
@@ -102,12 +82,6 @@ Registered User: Authenticated users who have created an account and logged in
 <img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/bc9fc72c-e0ea-4e0d-92e6-74f016cebba4" width="450" height="250">
 
 <img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/aa08f230-ff48-494f-868f-a96c874a25c5" width="450" height="250">
-
-
-
-
-
-
 
 ----------------------------------------------------------------------------
 
@@ -127,11 +101,6 @@ POST | /meal_plans | Creates a new meal plan for the user. | 6
 GET | /meal_plans | Retrieves all meal plans for a specific user. | 6
 PUT | /meal_plans | Updates a specific meal plan | 8
 DELETE | /meal_plans | Deletes a specific meal plan. | 8
-POST | /shopping_list | Generates a shopping list based on a meal plan. | 7
-GET | /shopping_list | Retrieves a specific shopping list. | 7
-PUT | /shopping_list | Updates a specific shopping list. | 7 
-DELETE | /shopping_list | Deletes a specific shopping list. | 7
-POST | /recipes_share | Shares a recipe with others via various methods. | 11
 
 ----------------------------------------------------------------------------
 ## Technical Challenges
@@ -146,8 +115,6 @@ POST | /recipes_share | Shares a recipe with others via various methods. | 11
 ----------------------------------------------------------------------------
 ## Authentication
 In MealMaster, user authentication ensures that registered users can securely access their personal features, while guest users can explore basic functionalities. Here's a simplified description of how user authentication is managed, including session and cookie management, and its effect on navigation between different screens.
-
-
 
 **Sign Up Process:**
 
