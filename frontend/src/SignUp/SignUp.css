@@ -58,7 +58,6 @@
     font-family: Didot, serif;
     margin-top: 20px;
     display:flex;
-    /* flex-direction: column; */
     gap:25px;
 }
 
@@ -71,13 +70,11 @@
     font-family: Didot, serif;
     height:50px;
     width:300px;
-    /* background: transparent; */
     background-color: #aeacac;
     border:none;
     outline:none;
     color:#030303;
     font-size: 13px;
-    /* right: 300px; */
     border-radius: 4px;
 }
 

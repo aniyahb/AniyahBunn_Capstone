@@ -7,8 +7,8 @@ const [isFav, setIsFav] = useState(false);
 
 const key = props.id
 const handleClick = () => {
-    props.handlePickedRecipe(props.id);
-    props. setModalOpen(true);
+    props.handlePickedRecipe(key);
+    props.setModalOpen(true);
 };
 
 
