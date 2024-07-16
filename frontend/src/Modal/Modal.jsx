@@ -5,9 +5,6 @@ import RecipeList from "../RecipeList/RecipeList.jsx";
 
 const Modal = (props) => {
     const { pickedRecipe, closeModal} = props;
-    // const closeModal = () => {
-    //     setModalOpen(!modalOpen);
-    // };
 
     return(
         <div className="modal-overlay" >

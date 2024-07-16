@@ -1,17 +1,16 @@
-import './HomePage.css'
+
 import SearchBar from '../SearchBar/SearchBar'
 import Profile from '../Profile/Profile'
-import RecipeList from '../RecipeList/RecipeList'
 
-function HomePage(props) {
+function MainHeader(props) {
 return(
-    <div className='homepageBody'>
-    <header className='homePageHeader'>
+    <div className='mainHeaderBody'>
+    <header className='mainHeaderHeader'>
         <div className='homePageTitle'>MealMaster</div>
         <div className='searchBar'><SearchBar setSearch={props.setSearch}/></div>
         <div className='profile'><span><Profile/></span></div>
     </header>
-    <div className='recipeList'><RecipeList/></div> </div>
+    </div>
     )
 }
-export default HomePage;
+export default MainHeader;
