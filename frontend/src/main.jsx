@@ -8,6 +8,7 @@ import LogIn from './LogIn/LogIn.jsx'
 import SignUp from './SignUp/SignUp.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import RecipeList from './RecipeList/RecipeList.jsx'
+import MainHeader from './MainHeader/MainHeader.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

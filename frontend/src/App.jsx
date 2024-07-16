@@ -11,7 +11,6 @@ import { func } from 'prop-types';
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("")
-  console.log(searchQuery)
 
   function handleSearchQuery(query){
     setSearchQuery(query)
