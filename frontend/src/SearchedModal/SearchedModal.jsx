@@ -2,10 +2,8 @@ import React from "react";
 import './SearchedModal.css';
 import missingImage from "../assets/placeholder_img.jpeg";
 
-
 const SearchedModal = (props) => {
     const { pickedRecipe, closeModal, ingredients, instructions} = props;
-    console.log(ingredients)
 
     return(
         <div className="modal-overlay" >
@@ -15,23 +13,26 @@ const SearchedModal = (props) => {
             <img className ="recipeImage" src={pickedRecipe?.image || missingImage}/>
             <div className="recipeDetails">
                 <h3 className="Ingredients"> Ingredients: </h3>
-                {/* <ul>
-                    {ingredients.ingredients && ingredients.ingredients.map((name, index) => (
-                        <li key={index}>{name.original}</li>
-                    ))}
-                </ul> */}
                 <ul>
-            {ingredients.map((ingredient, index) => (
+            {ingredients?.ingredients?.map((ingredients, index) => (
                 <li key={index}>
-                    {ingredient.name}
+                    {ingredients?.name}
                 </li>
             ))}
         </ul>
-                <h3 className="Instructions">Instructions:{instructions}</h3>
+                <h3 className="Instructions">Instructions:</h3>
+                {instructions?.map((instructionSet, setIndex) => (
+                        <div key={setIndex}>
+                            <ol>
+                                {instructionSet.steps.map((step, stepIndex) => (
+                                    <li key={stepIndex}>{step.step}</li>
+                                ))}
+                            </ol>
+                        </div>
+                    ))}
             </div>
         </div>
     </div>
-
     )
 }
 export default SearchedModal;
