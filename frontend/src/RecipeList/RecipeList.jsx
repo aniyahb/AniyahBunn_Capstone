@@ -38,7 +38,7 @@ const RecipeList = () =>{
     };
 
     const handleCloseModal = () => {
-        setModalOpen(modalOpen);
+        setModalOpen(false);
     };
 
     const handleOpenModal = (recipe) => {

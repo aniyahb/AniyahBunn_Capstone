@@ -11,6 +11,7 @@
     background-color: #ffffff;
     width: 100%;
     padding: 20px;
+    margin-bottom: 20px;
     box-sizing: border-box;
     z-index: 1;
     display: flex;
@@ -31,8 +32,33 @@
     color: #171717;
     font-size: 32px;
     padding: 20px;
+}
 
 
 
+.mainHeaderBody {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 30px;
 
+}
+
+.mainHeaderHeader {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.mainHeaderTitle{
+    margin: 0px;
+    height:30px;
+    font-family: Didot, serif;
+    color: green;
+    font-size: 32px;
+    padding: 20px;
 }
