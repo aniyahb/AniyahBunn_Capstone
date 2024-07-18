@@ -59,17 +59,102 @@ app.post('/login', async(req,res) =>{
     res.json ({message:'Logged in successfully'})
 })
 
-// Logout Endpoint
-app.post('/logout', (req,res) =>{
-    res.session.destroy(error => {
-        if(error){
-            return res.status(500).json({ error:'Failed to log out' })
-        }
-        res.clearCookie('connect.sid')
-        res.json({ message:'Logged out successfully!'})
-    })
-})
 
+// add favorite recipe
+app.post('/add-favorite', async (req, res) => {
+    const { recipeId } = req.body;
+    const userId = 1;
+
+    console.log('Received request to add favorite:', { userId, recipeId });
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: { id: parseInt(recipeId) },
+        });
+
+        console.log('Recipe lookup result:', recipe);
+
+        if (!recipe) {
+            console.log('Recipe not found:', recipeId);
+            return res.status(404).json({ error: 'Recipe not found' });
+        }
+
+        const favorite = await prisma.userFavoriteRecipe.create({
+            data: {
+            userId,
+            recipeId: parseInt(recipeId),
+            },
+        });
+
+        console.log('Favorite added successfully:', favorite);
+        res.status(201).json(favorite);
+        } catch (error) {
+        console.error('Detailed error adding favorite:', error);
+        res.status(500).json({
+            error: 'Failed to add favorite',
+            details: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        }
+    });
+// Remove favorite recipe
+app.delete('/remove-favorite/:recipeId', async (req, res) => {
+    const { recipeId } = req.params;
+    const userId = 1;
+
+    try {
+    await prisma.userFavoriteRecipe.delete({
+        where: {
+        userId_recipeId: {
+        userId,
+        recipeId: parseInt(recipeId),
+    },
+        },
+});
+    res.status(200).json({ message: 'Favorite removed successfully' });
+    } catch (error) {
+    console.error('Error removing favorite:', error);
+    res.status(500).json({ error: 'Failed to remove favorite' });
+    }
+});
+
+// Check if a recipe is favorited
+app.get('/check-favorite/:recipeId', async (req, res) => {
+    const { recipeId } = req.params;
+    const userId = 1;
+
+    try {
+    const favorite = await prisma.userFavoriteRecipe.findUnique({
+        where: {
+        userId_recipeId: {
+            userId,
+            recipeId: parseInt(recipeId),
+        },
+        },
+    });
+    res.json({ isFavorite: !!favorite });
+    } catch (error) {
+    console.error('Error checking favorite:', error);
+    res.status(500).json({ error: 'Failed to check favorite status' });
+    }
+});
+
+// Fetch favorite recipes
+app.get('/favorite-recipes', async (req, res) => {
+    const userId = 1;
+
+    try {
+    const favorites = await prisma.userFavoriteRecipe.findMany({
+        where: { userId },
+        include: { recipe: true },
+    });
+    const favoriteRecipes = favorites.map(fav => fav.recipe);
+    res.json(favoriteRecipes);
+    } catch (error) {
+    console.error('Error fetching favorite recipes:', error);
+    res.status(500).json({ error: 'Failed to fetch favorite recipes' });
+    }
+});
 
 app.get('/', async (req, res) => {
     res.send(`Welcome to Aniyah's Capstone!`);

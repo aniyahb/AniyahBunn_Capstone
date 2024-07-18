@@ -3,8 +3,11 @@ import './Modal.css';
 import missingImage from "../assets/placeholder_img.jpeg";
 import RecipeList from "../RecipeList/RecipeList.jsx";
 
-const Modal = (props) => {
-    const { pickedRecipe, closeModal} = props;
+const Modal = ({ pickedRecipe, closeModal}) => {
+    const splitInstructions = (instructions) => {
+        if (!instructions) return [];
+        return instructions.split(/(?<=[.!?])\s+/);
+    };
 
     return(
         <div className="modal-overlay" >
@@ -20,7 +23,11 @@ const Modal = (props) => {
                         ))}
                     </ul>
                 <h3 className="Instructions">Instructions:</h3>
-                <p>{pickedRecipe?.instructions}</p>
+                <ol>
+            {splitInstructions(pickedRecipe?.instructions).map((sentence, index) => (
+            <li key={index}>{sentence.trim()}</li>
+            ))}
+                </ol>
 
             </div>
         </div>

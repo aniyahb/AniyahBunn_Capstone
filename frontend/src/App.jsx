@@ -6,6 +6,7 @@ import LogIn from './LogIn/LogIn';
 import SignUp from './SignUp/SignUp';
 import SearchedPage from './SearchedPage/SearchedPage';
 import { func } from 'prop-types';
+import FavoriteRecipesPage from './FavoriteRecipesPage/FavoriteRecipesPage';
 
 
 
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/homepage" element={<HomePage setSearch={handleSearchQuery}/>} />
           <Route path="/logIn" element={<LogIn/>} />
           <Route path="/searched/:search" element={<SearchedPage query={searchQuery}/>}/>
+          <Route path="/favorites" element={<FavoriteRecipesPage/>}/>
 
       </Routes>
     </Router>

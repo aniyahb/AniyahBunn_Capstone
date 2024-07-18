@@ -11,24 +11,38 @@ const RecipeList = () =>{
     const [sortBy, setSortBy] = useState('Popular');
     const [search, setSearch] = useState("");
     const [url, setUrl] = useState('')
+    const [offset, setOffset] = useState(0);
 
-    useEffect(() => {
-        const fetchRecipes = async () => {
+        const fetchRecipes = async (offsetValue) => {
             try {
                 const response = await fetch(`https://api.spoonacular.com/recipes/random?number=60&apiKey=${import.meta.env.VITE_API_KEY}`) ;
                 if (!response.ok) {
                     throw new Error('Failed to get recipes');
                 }
                 const data = await response.json();
-                setPopular(data.recipes);
+                return data.recipes;
 
             } catch (error) {
                 console.error('Error fetching recipes:', error.message);
+                return [];
             }
         };
 
-        fetchRecipes();
+    useEffect(() => {
+        const loadInitialRecipes = async () => {
+        const initialRecipes = await fetchRecipes(0);
+        setPopular(initialRecipes);
+        };
+        loadInitialRecipes();
     }, []);
+
+    const handleLoadMore = async () => {
+        const newOffset = offset + 60;
+        const newRecipes = await fetchRecipes(newOffset);
+        setPopular(prevRecipes => [...prevRecipes, ...newRecipes]);
+        setOffset(newOffset);
+    };
+
 
 
     const handlePickedRecipe = (id) => {
@@ -65,6 +79,8 @@ const RecipeList = () =>{
                     ))}
 
             </div>
+            <button onClick={handleLoadMore} className="loadMoreButton">More Meals</button>
+
             </>
         );
 
