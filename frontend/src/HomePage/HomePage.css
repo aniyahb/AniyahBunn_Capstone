@@ -1,22 +1,24 @@
 .homepageBody {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-
-
+    width: 100%;
 }
 
 .homePageHeader {
     background-color: #ffffff;
     width: 100%;
-    padding: 20px;
+    padding: 5px;
     margin-bottom: 20px;
     box-sizing: border-box;
     z-index: 1;
     display: flex;
     flex-direction: row;
-
+    position: sticky;
+    top: 0;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .recipeList {
@@ -29,9 +31,10 @@
     margin: 0px;
     height:30px;
     font-family: Didot, serif;
-    color: #171717;
+    color:rgb(2, 86, 2);
     font-size: 32px;
     padding: 20px;
+    flex-shrink: 0;
 }
 
 
@@ -61,4 +64,21 @@
     color: green;
     font-size: 32px;
     padding: 20px;
+}
+
+.searchBar, .profile {
+    flex-grow: 1;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .homePageHeader {
+    flex-direction: row;
+    align-items: stretch;
+    }
+
+    .homePageTitle, .searchBar, .profile {
+    width: 100%;
+    text-align: center;
+    }
 }

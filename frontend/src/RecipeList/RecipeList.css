@@ -1,10 +1,30 @@
 .recipe-list {
     display: flex;
     flex-direction: row;
-    background-color: rgb(249, 251, 249);
+    background-color: rgb(255, 255, 255);
     flex-flow: wrap;
     padding: 10px;
     gap: 10px;
     align-content: center;
     justify-content: center;
+}
+
+.loadMoreButton{
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #2e3d2f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Didot, serif;
+    outline:none;
+}
+
+.loadMoreButton:hover {
+    background-color: #acb5ad;
+    color: black;
+    outline:none;
 }

@@ -18,14 +18,33 @@ model user{
   name      String
   email     String   @unique
   password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  favoriteRecipes UserFavoriteRecipe[]
 }
 
-model recipe {
-  id        Int      @id @default(autoincrement())
-  title     String
-  image     String
-  cuisine   String
-  ingredients String
+model Recipe {
+  id           Int       @id @default(autoincrement())
+  title        String
+  image        String
+  ingredients  String
   instructions String
-  createdAt DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  favoritedBy    UserFavoriteRecipe[]
+}
+
+model UserFavoriteRecipe{
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  recipeId    Int
+  createdAt    DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        user      @relation(fields: [userId], references: [id])
+  recipe      Recipe    @relation(fields: [recipeId], references: [id])
+
+  @@unique([userId, recipeId])
 }

@@ -11,6 +11,45 @@ const handleClick = () => {
     props.setModalOpen(true);
 };
 
+const checkFavoriteStatus = async () => {
+        try {
+        const response = await fetch(`http://localhost:2500/check-favorite/${key}`, {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        setIsFav(data.isFavorite);
+        } catch (error) {
+        console.error('Error checking favorite status:', error);
+        }
+    };
+
+
+const handleAddFavorite = async (e) => {
+        e.stopPropagation();
+        try {
+            if (isFav) {
+                await fetch(`http://localhost:2500/remove-favorite/${key}`, {
+                method: 'DELETE',
+                credentials: 'include'
+                });
+                console.log(`Recipe with ID ${key} was removed from favorites.`);
+            } else {
+
+                await fetch('http://localhost:2500/add-favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ recipeId: key }),
+                credentials: 'include'
+                });
+                console.log(`Adding recipe with ID ${key} to favorites`);
+            }
+            setIsFav(!isFav);
+            } catch (error) {
+            console.error('Error updating favorite:', error);
+            }
+        };
 
     return (
         <div className="recipeCard" onClick={handleClick}>
@@ -20,19 +59,14 @@ const handleClick = () => {
                 <h2 className = "recipeName" > {props.title}</h2>
                 <div className='underName'>
                 <h3 className= "cuisine"> Cuisines:</h3>
-
-
                 <div className= "favRecipe">
-                    <a className= "favoriteIcon" onClick={(e) => {
-                            e.stopPropagation();
-                            setIsFav(!isFav);
-                            }}>
-                        {isFav ?
-                            <i className="fa-solid fa-heart"></i> :
-                            <i className="fa-regular fa-heart"></i>
-                    }
-                    </a>
+                <a className="favoriteIcon" onClick={handleAddFavorite}>
 
+                    {isFav ?
+                    <i className="fa-solid fa-heart"></i> :
+                    <i className="fa-regular fa-heart"></i>
+                    }
+                </a>
                 </div>
                 </div>
             </section>
