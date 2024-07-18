@@ -62,10 +62,7 @@ const handleAddFavorite = async (e) => {
                 <div className= "favRecipe">
                 <a className="favoriteIcon" onClick={handleAddFavorite}>
 
-                    {isFav ?
-                    <i className="fa-solid fa-heart"></i> :
-                    <i className="fa-regular fa-heart"></i>
-                    }
+                <i className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
                 </a>
                 </div>
                 </div>

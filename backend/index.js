@@ -59,17 +59,6 @@ app.post('/login', async(req,res) =>{
     res.json ({message:'Logged in successfully'})
 })
 
-// Logout Endpoint
-// app.post('/logout', (req,res) =>{
-//     res.session.destroy(error => {
-//         if(error){
-//             return res.status(500).json({ error:'Failed to log out' })
-//         }
-//         res.clearCookie('connect.sid')
-//         res.json({ message:'Logged out successfully!'})
-//     })
-// })
-
 
 // add favorite recipe
 app.post('/add-favorite', async (req, res) => {
