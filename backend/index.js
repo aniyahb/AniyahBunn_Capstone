@@ -67,6 +67,7 @@ app.post('/add-favorite', async (req, res) => {
 
     console.log('Received request to add favorite:', { userId, recipeId });
     try {
+        console.log('Attempting to find recipe with id:', recipeId);
         const recipe = await prisma.recipe.findUnique({
             where: { id: parseInt(recipeId) },
         });
@@ -78,6 +79,7 @@ app.post('/add-favorite', async (req, res) => {
             return res.status(404).json({ error: 'Recipe not found' });
         }
 
+        console.log('Attempting to create favorite');
         const favorite = await prisma.userFavoriteRecipe.create({
             data: {
             userId,
@@ -88,7 +90,10 @@ app.post('/add-favorite', async (req, res) => {
         console.log('Favorite added successfully:', favorite);
         res.status(201).json(favorite);
         } catch (error) {
-        console.error('Detailed error adding favorite:', error);
+            console.error('Detailed error adding favorite:', error);
+            console.error('Error name:', error.name);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
         res.status(500).json({
             error: 'Failed to add favorite',
             details: error.message,

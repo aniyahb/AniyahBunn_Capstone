@@ -35,7 +35,7 @@ const handleAddFavorite = async (e) => {
                 console.log(`Recipe with ID ${key} was removed from favorites.`);
             } else {
 
-                await fetch('http://localhost:2500/add-favorite', {
+                await fetch("http://localhost:2500/add-favorite", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
