@@ -37,7 +37,7 @@ const checkFavoriteStatus = async () => {
 const handleAddFavorite = async (e) => {
         e.stopPropagation();
         if (!userId) {
-            console.log("Cannot Favorite this recipe, please log in to add favorites");
+            console.log("Please log in to add favorites");
             return;
         }
         try {
