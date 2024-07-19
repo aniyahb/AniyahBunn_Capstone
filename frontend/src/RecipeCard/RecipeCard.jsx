@@ -1,5 +1,6 @@
 import './RecipeCard.css'
 import React, { useState } from "react";
+import { useEffect } from 'react';
 
 
 const RecipeCard = (props) => {
@@ -11,21 +12,35 @@ const handleClick = () => {
     props.setModalOpen(true);
 };
 
+
+
+const userId = props.userId;
+
+useEffect(() => {
+    if (userId) {
+        checkFavoriteStatus();
+        }
+    }, [userId]);
+
 const checkFavoriteStatus = async () => {
         try {
-        const response = await fetch(`http://localhost:2500/check-favorite/${key}`, {
+        const response = await fetch(`http://localhost:2500/check-favorite/${key}?userId=${userId}`, {
             credentials: 'include'
         });
         const data = await response.json();
-        setIsFav(data.isFavorite);
+        setIsFav(data.isFav);
         } catch (error) {
         console.error('Error checking favorite status:', error);
         }
     };
 
-
 const handleAddFavorite = async (e) => {
         e.stopPropagation();
+        if (!userId) {
+            console.log("Please log in to add favorites");
+            // Here you could show a login prompt or redirect to login page
+            return;
+        }
         try {
             if (isFav) {
                 await fetch(`http://localhost:2500/remove-favorite/${key}`, {
@@ -40,7 +55,7 @@ const handleAddFavorite = async (e) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ recipeId: key }),
+                body: JSON.stringify({ recipeId: key, userId: userId }),
                 credentials: 'include'
                 });
                 console.log(`Adding recipe with ID ${key} to favorites`);
@@ -61,7 +76,6 @@ const handleAddFavorite = async (e) => {
                 <h3 className= "cuisine"> Cuisines:</h3>
                 <div className= "favRecipe">
                 <a className="favoriteIcon" onClick={handleAddFavorite}>
-
                 <i className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
                 </a>
                 </div>

@@ -4,6 +4,9 @@ import RecipeCard from "../RecipeCard/RecipeCard";
 import missingImage from "../assets/placeholder_img.jpeg"
 import SearchedModal from "../SearchedModal/SearchedModal";
 import Profile from "../Profile/Profile";
+import { Link } from "react-router-dom";
+import { CiHome } from "react-icons/ci";
+import './SearchedPage.css'
 
 function SearchedPage(props){
     const [searchedRecipes, setSearchedRecipes] = useState ([])
@@ -76,8 +79,13 @@ function SearchedPage(props){
 
     return(
         <>
-        <header className='homePageHeader'>
-        <div className='homePageTitle'>MealMaster</div>
+
+        <header className='searchPageHeader'>
+        <div className='searchPageTitle'>
+            <Link to="/HomePage" className="home-icon" >
+                <CiHome />
+            </Link>
+            MealMaster</div>
         <div className='profile'><span><Profile/></span></div>
         </header>
 

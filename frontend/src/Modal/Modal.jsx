@@ -4,10 +4,18 @@ import missingImage from "../assets/placeholder_img.jpeg";
 import RecipeList from "../RecipeList/RecipeList.jsx";
 
 const Modal = ({ pickedRecipe, closeModal}) => {
+    const stripHtml = (html) => {
+        let tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+        }
+
     const splitInstructions = (instructions) => {
-        if (!instructions) return [];
-        return instructions.split(/(?<=[.!?])\s+/);
-    };
+            if (!instructions) return [];
+            const cleanInstructions = stripHtml(instructions);
+            return cleanInstructions.split(/(?<=[.!?])\s+/);
+
+    }
 
     return(
         <div className="modal-overlay" >
@@ -24,9 +32,9 @@ const Modal = ({ pickedRecipe, closeModal}) => {
                     </ul>
                 <h3 className="Instructions">Instructions:</h3>
                 <ol>
-            {splitInstructions(pickedRecipe?.instructions).map((sentence, index) => (
-            <li key={index}>{sentence.trim()}</li>
-            ))}
+                    {splitInstructions(pickedRecipe?.instructions).map((sentence, index) => (
+                    <li key={index}>{sentence.trim()}</li>
+                    ))}
                 </ol>
 
             </div>
