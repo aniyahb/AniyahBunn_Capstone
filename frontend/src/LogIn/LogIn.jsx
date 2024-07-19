@@ -21,6 +21,7 @@ function LogIn(){
 
         try{
             setLoading(true);
+            console.log('Sending login request');
             const response = await fetch("http://127.0.0.1:2500/logIn",{
                 method:"POST",
                 headers:{
@@ -30,24 +31,32 @@ function LogIn(){
                     email,
                     password,
                 }),
-                credentials: 'include'
             });
-            console.log(response )
-            if(response.ok){
-                const data = await response.json();
-                const loggedInUser = data.user;
-                navigate("/HomePage")
-            }else{
-                setError('Login Failed')
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log(response)
 
-            }
-        }   catch(error){
-            setError('An error occured');
-        }   finally{
-            setLoading(false)
-        }
-    }
-
+            if (response.ok) {
+                if (data.token) {
+                    console.log('Token Received');
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    navigate("/HomePage")
+                    } else {
+                        console.log('No token in response');
+                        setError('Login successful, but no token received');
+                    }
+                } else {
+                    console.log
+                    setError('Login Failed')
+                }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    setError('An error occurred');
+                    } finally {
+                    setLoading(false);
+                    }
+                }
 //_________________________________________________________________
     return(
         <div className='logInBody'>
