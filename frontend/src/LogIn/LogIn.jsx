@@ -1,5 +1,5 @@
 import './LogIn.css'
-import React, { useState, useContext, createContext} from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 import {useNavigate} from "react-router-dom"
 
@@ -12,8 +12,13 @@ function LogIn(){
     const navigate = useNavigate()
 
 
+
     async function handleLogIn(event){
         event.preventDefault();
+        setError(null);
+        setLoading(true);
+
+
         if(!email || !password){
             setError("Fill out both fields")
             return;
@@ -21,42 +26,35 @@ function LogIn(){
 
         try{
             setLoading(true);
-            console.log('Sending login request');
-            const response = await fetch("http://127.0.0.1:2500/logIn",{
+            const response = await fetch("http://localhost:2500/login",{
                 method:"POST",
                 headers:{
                     "Content-Type": "application/json",
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     email,
                     password,
                 }),
+                credentials: 'include'
             });
-            console.log('Response status:', response.status);
-            const data = await response.json();
-            console.log(response)
 
-            if (response.ok) {
-                if (data.token) {
-                    console.log('Token Received');
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    navigate("/HomePage")
-                    } else {
-                        console.log('No token in response');
-                        setError('Login successful, but no token received');
-                    }
-                } else {
-                    console.log
-                    setError('Login Failed')
-                }
-                } catch (error) {
-                    console.error('Login error:', error);
-                    setError('An error occurred');
-                    } finally {
-                    setLoading(false);
-                    }
-                }
+            const data = await response.json();
+
+            if(response.ok){
+                console.log("Logged in user:", data.user);
+                navigate("/HomePage");
+
+            }else{
+                setError(data.error || 'Login failed');
+            }
+        }   catch(error){
+            console.error('Login error:', error);
+            setError('An error occurred. Please try again.');
+        }   finally{
+            setLoading(false)
+        }
+    }
+
 //_________________________________________________________________
     return(
         <div className='logInBody'>
@@ -92,8 +90,8 @@ function LogIn(){
                                 Sign Up
                             </Link>
                         </p>
-                        <button className='logInButton' onClick={handleLogIn} disabled={loading}>
-                            Login
+                        <button className='logInButton' type="submit" disabled={loading}>
+                        {loading ? 'Logging in...' : 'Login'}
                         </button>
                     </form>
             </div>

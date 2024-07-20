@@ -1,6 +1,6 @@
 import './SignUp.css'
-import React, { useContext, useState } from "react";
-import {useNavigate,Link,Router} from "react-router-dom"
+import React, { useState } from "react";
+import {useNavigate} from "react-router-dom"
 
 
 
@@ -16,6 +16,7 @@ function SignUp(){
 
     async function handleSignUp(event){
         event.preventDefault();
+        setError('');
 
         if (password !== confirmPassword) {
             setError('Passwords do not match');
@@ -38,33 +39,28 @@ function SignUp(){
                 }),
                 credentials: 'include'
             });
+
+            const data = await response.json();
             console.log(response)
-            const data = await response.json()
-            if(response.ok){
-                goToHomepage()
-            } else{
-                setError('Registration failed')
-
+            if (response.ok) {
+                navigate('/HomePage');
+            } else {
+                if (data.error === 'Email already exists. Please login.') {
+                    alert('This email is already registered. Please log in instead.');
+                    navigate('/logIn');
+                } else {
+                    setError(data.error || 'Registration failed');
+                }
             }
-            if (data.error){
-                console.log(data.error)
-                setError(data.error);
-                alert(data.error)
-            }
-    }       catch(error){
-            console.log(error)
-            setError(data.error);
-            alert(data.error)
-            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            setError('An error occurred during signup');
+        }
     }
-
     function goToLogin(){
         navigate('/logIn')
     }
 
-    function goToHomepage(){
-        navigate('/HomePage')
-    }
 
 //_________________________________________________________________
 

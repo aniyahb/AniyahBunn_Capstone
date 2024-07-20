@@ -10,8 +10,11 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken');
 
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+const JWT_SECRET = process.env.JWT_SECRET ;
+if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not set in environment variables');
+}
+
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -19,66 +22,175 @@ app.use(cors({
 }))
 
 
+
 // Sign Up Endpoint
 app.post('/signup', async (req, res) => {
-    const {name, email, password, confirmPassword} = req.body;
-
-    const existingUser = await prisma.user.findUnique({
-        where: {email},
-    });
-    if (existingUser) {
-        console.log(`Email already exists please login.`);
-        return res.json({error: 'Email already exists'});
+    const { name, email, password, confirmPassword } = req.body;
 
 
+    if (password !== confirmPassword) {
+        return res.status(400).json({ error: 'Passwords do not match' });
     } else {
-        if(password ===  confirmPassword) {
-            const hashedPassword = await bcrypt.hash(password,10);
-            try{
-                const user = await prisma.user.create({
-                    data: {name, email, password: hashedPassword},
-                });
-                res.status(201).json(user);
-            }catch (error){
-                console.error('Error creating user:', error);
-                if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
-                    return res.status(400).json({ error: 'Email already exists. Please Login ' });
-                } else {
-                    return res.status(500).json({ error: 'Failed to create user' });
-                }
-            }
-        } else{
-            return res.status(400).json({message: 'Passwords do not match'})
-        }
-    }
-});
+        try {
+            const existingUser = await prisma.user.findUnique({
+                where: {email},
+            });
 
+            if (existingUser) {
+                return res.status(400).json({ error: 'Email already exists. Please login.' });
+            }
+
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const user = await prisma.user.create({
+                data: { name, email, password: hashedPassword },
+            });
+
+            res.status(201).json({ message: 'User created successfully', userId: user.id });
+
+
+
+
+        } catch (error) {
+            console.error('Error creating user:', error);
+            res.status(500).json({ error: 'Failed to create user' });
+        }
+
+    }
+
+
+});
 
 // Login Endpoint
-app.post('/login', async(req,res) =>{
-    console.log('Login request received:', req.body);
-    const {email,password} = req.body
-    try{
-        const user = await prisma.user.findFirst({where: {email:email} })
-        console.log('User found:', user ? 'Yes' : 'No');
-        if(!user || !(await bcrypt.compare(password, user.password))){
-            console.log('Login failed: Invalid credentials');
-            return res.status(401).json({ error: 'Invalid email or password'})
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    console.log(`Login attempt for email: ${email}`);
+    try {
+        const user = await prisma.user.findUnique({ where: { email } });
+        console.log(`Login attempt for email: ${email}`);
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid email or password' });
         }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log(`Password valid: ${isPasswordValid ? 'Yes' : 'No'}`);
+        if (!isPasswordValid) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
+
         const token = jwt.sign(
-            { userId: user.id },
-            process.env.JWT_SECRET,
+            { userId: user.id, email: user.email },
+            secretOrPrivateKey = process.env.JWT_SECRET,
             { expiresIn: '1h' }
-        )
-        console.log('Token generated:', token);
-        console.log('Sending response');
-        res.json({ message: 'Logged in successfully', token, user: { id: user.id, name: user.name, email: user.email } });
+        );
+
+        res.json({
+            message: 'Logged in successfully',
+            token,
+            user: { id: user.id, name: user.name, email: user.email }
+        });
     } catch (error) {
-    console.error('Login Error:', error);
-    res.status(500).json({ error: 'An error occurred during login' });
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'An error occurred during login' });
     }
 });
 
+
+// add favorite recipe
+app.post('/add-favorite', async (req, res) => {
+    const { recipeId } = req.body;
+    const userId = 1;
+
+    console.log('Received request to add favorite:', { userId, recipeId });
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: { id: parseInt(recipeId) },
+        });
+
+        console.log('Recipe lookup result:', recipe);
+
+        if (!recipe) {
+            console.log('Recipe not found:', recipeId);
+            return res.status(404).json({ error: 'Recipe not found' });
+        }
+
+        const favorite = await prisma.userFavoriteRecipe.create({
+            data: {
+            userId,
+            recipeId: parseInt(recipeId),
+            },
+        });
+
+        console.log('Favorite added successfully:', favorite);
+        res.status(201).json(favorite);
+        } catch (error) {
+        console.error('Detailed error adding favorite:', error);
+        res.status(500).json({
+            error: 'Failed to add favorite',
+            details: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        }
+    });
+// Remove favorite recipe
+app.delete('/remove-favorite/:recipeId', async (req, res) => {
+    const { recipeId } = req.params;
+    const userId = 1;
+
+    try {
+    await prisma.userFavoriteRecipe.delete({
+        where: {
+        userId_recipeId: {
+        userId,
+        recipeId: parseInt(recipeId),
+    },
+        },
+});
+    res.status(200).json({ message: 'Favorite removed successfully' });
+    } catch (error) {
+    console.error('Error removing favorite:', error);
+    res.status(500).json({ error: 'Failed to remove favorite' });
+    }
+});
+
+// Check if a recipe is favorited
+app.get('/check-favorite/:recipeId', async (req, res) => {
+    const { recipeId } = req.params;
+    const userId = 1;
+
+    try {
+    const favorite = await prisma.userFavoriteRecipe.findUnique({
+        where: {
+        userId_recipeId: {
+            userId,
+            recipeId: parseInt(recipeId),
+        },
+        },
+    });
+    res.json({ isFavorite: !!favorite });
+    } catch (error) {
+    console.error('Error checking favorite:', error);
+    res.status(500).json({ error: 'Failed to check favorite status' });
+    }
+});
+
+// Fetch favorite recipes
+app.get('/favorite-recipes', async (req, res) => {
+    const userId = 1;
+
+    try {
+    const favorites = await prisma.userFavoriteRecipe.findMany({
+        where: { userId },
+        include: { recipe: true },
+    });
+    const favoriteRecipes = favorites.map(fav => fav.recipe);
+    res.json(favoriteRecipes);
+    } catch (error) {
+    console.error('Error fetching favorite recipes:', error);
+    res.status(500).json({ error: 'Failed to fetch favorite recipes' });
+    }
+});
 
 app.get('/', async (req, res) => {
     res.send(`Welcome to Aniyah's Capstone!`);
@@ -87,81 +199,3 @@ app.get('/', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 });
-
-
-
-
-// Check favorite status
-app.get('/check-favorite/:id', async (req, res) => {
-    const { id } = req.params;
-    const userId = req.query.userId; // Get userId from query parameter
-
-    if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized' });
-        }
-
-        try {
-        const favorite = await prisma.userFavoriteRecipe.findUnique({
-            where: {
-            userId_recipeId: {
-                userId: parseInt(userId),
-                recipeId: parseInt(id)
-            }
-            }
-        });
-        res.json({ isFavorite: !!favorite });
-    } catch (error) {
-        console.error('Error checking favorite status:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-// Add favorite
-app.post('/add-favorite', async (req, res) => {
-    const { recipeId, userId } = req.body;
-
-        if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized' });
-        }
-
-        try {
-        const favorite = await prisma.userFavoriteRecipe.create({
-            data: {
-            userId: parseInt(userId),
-            recipeId: parseInt(recipeId)
-            }
-        });
-
-        res.json({ message: 'Favorite added successfully', favorite });
-        } catch (error) {
-        console.error('Error adding favorite:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        }
-    });
-
-    // Remove favorite
-app.delete('/remove-favorite/:id', async (req, res) => {
-    const { id } = req.params;
-    const userId = req.query.userId; // Get userId from query parameter
-
-        if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized' });
-        }
-
-        try {
-        await prisma.userFavoriteRecipe.delete({
-            where: {
-            userId_recipeId: {
-                userId: parseInt(userId),
-                recipeId: parseInt(id)
-            }
-            }
-        });
-
-        res.json({ message: 'Favorite removed successfully' });
-        } catch (error) {
-        console.error('Error removing favorite:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        }
-    });
