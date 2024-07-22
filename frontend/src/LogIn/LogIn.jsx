@@ -42,6 +42,7 @@ function LogIn(){
 
             if(response.ok){
                 console.log("Logged in user:", data.user);
+                localStorage.setItem('token',data.token)
                 navigate("/HomePage");
 
             }else{

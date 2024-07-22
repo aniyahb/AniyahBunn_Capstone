@@ -12,6 +12,8 @@ const RecipeList = () =>{
     const [search, setSearch] = useState("");
     const [url, setUrl] = useState('')
     const [offset, setOffset] = useState(0);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
 
         const fetchRecipes = async (offsetValue) => {
             try {
@@ -34,7 +36,19 @@ const RecipeList = () =>{
         setPopular(initialRecipes);
         };
         loadInitialRecipes();
+        checkAuthStatus();
     }, []);
+
+    const checkAuthStatus = () => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+    };
+
+
+    const handleAuthError = (message) => {
+        console.log(message);
+
+    };
 
     const handleLoadMore = async () => {
         const newOffset = offset + 60;
@@ -75,6 +89,8 @@ const RecipeList = () =>{
                         cuisines={recipe.cuisines}
                         handlePickedRecipe={() => handlePickedRecipe(recipe.id)}
                         setModalOpen={setModalOpen}
+                        isAuthenticated={isAuthenticated}
+                        onAuthError={handleAuthError}
                     />
                     ))}
 
