@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { useEffect } from 'react';
 
 
-const RecipeCard = ({ id, image, title, isAuthenticated, onAuthError, handlePickedRecipe, setModalOpen }) => {
+const RecipeCard = ({ id, image, title, isAuthenticated, onAuthError , handlePickedRecipe, setModalOpen  }) => {
     const [isFav, setIsFav] = useState(false);
     const key = id
     const token = localStorage.getItem('token');
 
     const handleClick = () => {
-        props.handlePickedRecipe(key);
-        props.setModalOpen(true);
+        handlePickedRecipe(key);
+        setModalOpen(true);
     };
 
 
@@ -23,7 +23,6 @@ const RecipeCard = ({ id, image, title, isAuthenticated, onAuthError, handlePick
 
     const checkFavoriteStatus = async () => {
         const token = localStorage.getItem('token');
-
         if (!token) {
             onAuthError("No authentication token found");
             return;
@@ -39,6 +38,7 @@ const RecipeCard = ({ id, image, title, isAuthenticated, onAuthError, handlePick
             });
 
             if (response.status === 401 || response.status === 403) {
+                console.log(response)
                 onAuthError("Authentication failed");
                 return;
             }
@@ -83,38 +83,6 @@ const RecipeCard = ({ id, image, title, isAuthenticated, onAuthError, handlePick
         }
     };
 
-
-
-    // const handleAddFavorite = async (e) => {
-    //         e.stopPropagation();
-    //         if (!userId) {
-    //             console.log("Please log in to add favorites");
-    //             return;
-    //         }
-    //         try {
-    //             if (isFav) {
-    //                 await fetch(`http://localhost:2500/remove-favorite/${key}`, {
-    //                 method: 'DELETE',
-    //                 credentials: 'include'
-    //                 });
-    //                 console.log(`Recipe with ID ${key} was removed from favorites.`);
-    //             } else {
-
-    //                 await fetch("http://localhost:2500/add-favorite", {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({ recipeId: key, userId: userId }),
-    //                 credentials: 'include'
-    //                 });
-    //                 console.log(`Adding recipe with ID ${key} to favorites`);
-    //             }
-    //             setIsFav(!isFav);
-    //             } catch (error) {
-    //             console.error('Error updating favorite:', error);
-    //             }
-    //         };
 
         return (
             <div className="recipeCard" onClick={handleClick}>
