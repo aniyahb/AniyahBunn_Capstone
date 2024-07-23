@@ -102,16 +102,15 @@ app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
     console.log({req})
     const userId = req.user.id;
     try {
-        const favorite = await prisma.userFavoriteRecipe.findUnique({
+        const favorite = await prisma.userFavoriteRecipe.findFirst({
             where: {
-                userId_recipeId: {
-                    userId,
-                    recipeId: parseInt(recipeId),
-                },
+                    userId:userId,
+                    recipeId: parseInt(recipeId)
             },
         });
-        res.json({ isFavorite: !!favorite });
+        res.json({ isFavorite: !favorite });
     } catch (error) {
+        console.log(error)
         console.error('Error checking favorite:', error);
         res.status(500).json({ error: 'Failed to check favorite status' });
     }
@@ -119,23 +118,28 @@ app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
 
 // Add favorite recipe
 app.post('/add-favorite', authenticateToken, async (req, res) => {
-    const { recipeId } = req.body;
-    const userId = req.user.userId;
+    const { spoonacularId, recipeId } = req.body;
+    const userId = req.user.id;
     console.log('Received request to add favorite:', { userId, recipeId });
     try {
+        console.log(userId)
+        console.log(recipeId)
+
         const recipe = await prisma.recipe.findUnique({
-            where: { spoonacularId: parseInt(recipeId) },
+            where: { spoonacularId: parseInt(spoonacularId) },
         });
-        console.log(recipe)
-        if (!recipe) {
+        console.log("recipe", recipe)
+        if (recipe) {
             const favorite = await prisma.userFavoriteRecipe.create({
                 data: {
-                    userId: userId,
-                    recipeId: recipeId,
+                    user: { connect: { id: userId }},
+                    recipe: { connect: { id: recipeId }}
                 },
             });
             console.log('Favorite added successfully:', favorite);
             res.status(201).json(favorite);
+        } else {
+            res.status(404).json({ error: 'Recipe not found' });
         }
     } catch (error) {
         console.error('Detailed error adding favorite:', error);
@@ -152,16 +156,23 @@ app.post('/add-favorite', authenticateToken, async (req, res) => {
 // Remove favorite recipe
 app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => {
     const { recipeId } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id;
+    console.log('Received request to delete favorite:', { userId, recipeId });
+
     try {
-        await prisma.userFavoriteRecipe.delete({
+        const recipe = await prisma.recipe.findUnique({
+            where: { spoonacularId: parseInt(recipeId) },
+        });
+        if (!recipe) {
+            return res.status(404).json({ error: 'Recipe not found' });
+        }
+        await prisma.userFavoriteRecipe.deleteMany({
             where: {
-                userId_recipeId: {
-                    userId,
-                    recipeId: parseInt(recipeId),
-                },
+                userId: userId,
+                recipeId: recipe.id
             },
         });
+
         res.status(200).json({ message: 'Favorite removed successfully' });
     } catch (error) {
         console.error('Error removing favorite:', error);
@@ -170,10 +181,25 @@ app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => 
 });
 
 
+app.get('/recipes', async (req, res) => {
+    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 60;
+
+    try {
+        const recipes = await prisma.recipe.findMany({
+            skip: offset,
+            take: limit,
+        });
+        res.json({ recipes });
+    } catch (error) {
+        console.error('Error fetching recipes:', error);
+        res.status(500).json({ error: 'Failed to fetch recipes' });
+    }
+});
 
 
 
-
+//storing
 async function fetchAndAddRecipes() {
     try {
         const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${process.env.VITE_API_KEY}`);
@@ -209,7 +235,7 @@ async function fetchAndAddRecipes() {
     }
 }
 
-cron.schedule('0 0 * * *', () => {
+cron.schedule('0 */6 * * *', () => {
     console.log('Running cron job to add recipes');
     fetchAndAddRecipes();
 });

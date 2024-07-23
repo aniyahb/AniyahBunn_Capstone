@@ -17,7 +17,7 @@ const RecipeList = () =>{
 
         const fetchRecipes = async (offsetValue) => {
             try {
-                const response = await fetch(`https://api.spoonacular.com/recipes/random?number=60&apiKey=${import.meta.env.VITE_API_KEY}`) ;
+                const response = await fetch(`http://localhost:2500/recipes?offset=${offsetValue}&limit=60`) ;
                 if (!response.ok) {
                     throw new Error('Failed to get recipes');
                 }
@@ -82,8 +82,10 @@ const RecipeList = () =>{
                 {popular.map((recipe) => (
                     <RecipeCard
                         key={recipe.id}
-                        id={recipe.id}
+                        recipeId={recipe.id}
+                        id={recipe.spoonacularId}
                         setPickedRecipe={setPickedRecipe}
+
                         title={recipe.title}
                         image={recipe.image || missingImage}
                         cuisines={recipe.cuisines}
