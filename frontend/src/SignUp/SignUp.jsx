@@ -43,7 +43,8 @@ function SignUp(){
             const data = await response.json();
             console.log(response)
             if (response.ok) {
-                navigate('/HomePage');
+                alert('Welcome to MealMaster! Please login.');
+                navigate('/LogIn');
             } else {
                 if (data.error === 'Email already exists. Please login.') {
                     alert('This email is already registered. Please log in instead.');
