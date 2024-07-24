@@ -9,12 +9,13 @@ app.use(express.json())
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
 
+const cron = require('node-cron');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const JWT_SECRET = process.env.JWT_SECRET ;
 if (!JWT_SECRET) {
     throw new Error('JWT_SECRET is not set in environment variables');
 }
-
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -22,13 +23,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
-
-
 // Sign Up Endpoint
 app.post('/signup', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
-
-
     if (password !== confirmPassword) {
         return res.status(400).json({ error: 'Passwords do not match' });
     } else {
@@ -36,30 +33,19 @@ app.post('/signup', async (req, res) => {
             const existingUser = await prisma.user.findUnique({
                 where: {email},
             });
-
             if (existingUser) {
                 return res.status(400).json({ error: 'Email already exists. Please login.' });
             }
-
-
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await prisma.user.create({
                 data: { name, email, password: hashedPassword },
             });
-
             res.status(201).json({ message: 'User created successfully', userId: user.id });
-
-
-
-
         } catch (error) {
             console.error('Error creating user:', error);
             res.status(500).json({ error: 'Failed to create user' });
         }
-
     }
-
-
 });
 
 // Login Endpoint
@@ -72,19 +58,16 @@ app.post('/login', async (req, res) => {
         if (!user) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
         console.log(`Password valid: ${isPasswordValid ? 'Yes' : 'No'}`);
         if (!isPasswordValid) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
-
         const token = jwt.sign(
-            { userId: user.id, email: user.email },
+            { id: user.id, email: user.email },
             secretOrPrivateKey = process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-
         res.json({
             message: 'Logged in successfully',
             token,
@@ -97,46 +80,51 @@ app.post('/login', async (req, res) => {
 });
 
 
-// NEW
+
 const authenticateToken = (req, res, next) => {
+    console.log("AAAA")
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
+    console.log(token)
     if (token == null) return res.sendStatus(401);
-
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) {console.log(err);return res.sendStatus(403);}
         req.user = user;
+        // console.log(user)
         next();
     });
 };
 
-
-// add favorite recipe
-app.post('/add-favorite', authenticateToken, async (req, res) => {
-    const { recipeId } = req.body;
-    const userId = req.user.userId;
-
-    console.log('Received request to add favorite:', { userId, recipeId });
+// Check if a recipe is favorited
+app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
+    const { recipeId } = req.params;
+    const userId = req.user.id;
     try {
-        const recipe = await prisma.recipe.findUnique({
-            where: { id: parseInt(recipeId) },
-        });
-
-        console.log('Recipe lookup result:', recipe);
-
-        if (!recipe) {
-            console.log('Recipe not found:', recipeId);
-            return res.status(404).json({ error: 'Recipe not found' });
-        }
-
-        const favorite = await prisma.userFavoriteRecipe.create({
-            data: {
-                userId,
-                recipeId: parseInt(recipeId),
+        const favorite = await prisma.userFavoriteRecipe.findFirst({
+            where: {
+                userId: userId,
+                recipeId: parseInt(recipeId)
             },
         });
+        res.json({ isFavorite: !!favorite });
+    } catch (error) {
+        console.error('Error checking favorite:', error);
+        res.status(500).json({ error: 'Failed to check favorite status' });
+    }
+});
 
+// Add favorite recipe
+app.post('/add-favorite', authenticateToken, async (req, res) => {
+    const { recipeId } = req.body;
+    const userId = req.user.id;
+    console.log('Received request to add favorite:', { userId, recipeId });
+    try {
+        const favorite = await prisma.userFavoriteRecipe.create({
+            data: {
+                userId: userId,
+                recipeId: parseInt(recipeId)
+            },
+        });
         console.log('Favorite added successfully:', favorite);
         res.status(201).json(favorite);
     } catch (error) {
@@ -153,17 +141,17 @@ app.post('/add-favorite', authenticateToken, async (req, res) => {
 // Remove favorite recipe
 app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => {
     const { recipeId } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id;
+    console.log('Received request to delete favorite:', { userId, recipeId });
 
     try {
-        await prisma.userFavoriteRecipe.delete({
+        await prisma.userFavoriteRecipe.deleteMany({
             where: {
-                userId_recipeId: {
-                    userId,
-                    recipeId: parseInt(recipeId),
-                },
+                userId: userId,
+                recipeId: parseInt(recipeId)
             },
         });
+
         res.status(200).json({ message: 'Favorite removed successfully' });
     } catch (error) {
         console.error('Error removing favorite:', error);
@@ -171,43 +159,68 @@ app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => 
     }
 });
 
-// Check if a recipe is favorited
-app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
-    const { recipeId } = req.params;
-    const userId = req.user.userId;
-
-    try {
-        const favorite = await prisma.userFavoriteRecipe.findUnique({
-            where: {
-                userId_recipeId: {
-                    userId,
-                    recipeId: parseInt(recipeId),
-                },
-            },
-        });
-        res.json({ isFavorite: !!favorite });
-    } catch (error) {
-        console.error('Error checking favorite:', error);
-        res.status(500).json({ error: 'Failed to check favorite status' });
-    }
-});
-
-// Fetch favorite recipes
+// Fetching favorites
 app.get('/favorite-recipes', authenticateToken, async (req, res) => {
-    const userId = req.user.userId;
-
+    const userId = req.user.id;
     try {
         const favorites = await prisma.userFavoriteRecipe.findMany({
-            where: { userId },
-            include: { recipe: true },
+            where: {
+                userId: userId
+            },
+            select: {
+                recipeId: true
+            }
         });
-        const favoriteRecipes = favorites.map(fav => fav.recipe);
-        res.json(favoriteRecipes);
+        const favoriteIds = favorites.map(fav => fav.recipeId);
+        res.json(favoriteIds);
     } catch (error) {
         console.error('Error fetching favorite recipes:', error);
         res.status(500).json({ error: 'Failed to fetch favorite recipes' });
     }
 });
+
+//storing
+// async function fetchAndAddRecipes() {
+//     try {
+//         const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${process.env.VITE_API_KEY}`);
+//         // console.log(response);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         const recipes = data.recipes;
+
+//         for (let recipe of recipes) {
+//             await prisma.recipe.upsert({
+//                 where: { spoonacularId: recipe.id },
+//                 update: {
+//                     title: recipe.title,
+//                     image: recipe.image,
+//                     ingredients: JSON.stringify(recipe.extendedIngredients),
+//                     instructions: recipe.instructions || '',
+//                 },
+//                 create: {
+//                     spoonacularId: recipe.id,
+//                     title: recipe.title,
+//                     image: recipe.image,
+//                     ingredients: JSON.stringify(recipe.extendedIngredients),
+//                     instructions: recipe.instructions || '',
+//                 },
+//             });
+//         }
+
+//         console.log('Recipes added successfully');
+//     } catch (error) {
+//         console.error('Error adding recipes:', error);
+//     }
+// }
+
+// cron.schedule('0 */6 * * *', () => {
+//     console.log('Running cron job to add recipes');
+//     fetchAndAddRecipes();
+// });
+
+// fetchAndAddRecipes();
 
 app.get('/', async (req, res) => {
     res.send(`Welcome to Aniyah's Capstone!`);
