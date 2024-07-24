@@ -97,20 +97,17 @@ const authenticateToken = (req, res, next) => {
 
 // Check if a recipe is favorited
 app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
-    console.log("BLAHHHH")
     const { recipeId } = req.params;
-    console.log({req})
     const userId = req.user.id;
     try {
         const favorite = await prisma.userFavoriteRecipe.findFirst({
             where: {
-                    userId:userId,
-                    recipeId: parseInt(recipeId)
+                userId: userId,
+                recipeId: parseInt(recipeId)
             },
         });
-        res.json({ isFavorite: !favorite });
+        res.json({ isFavorite: !!favorite });
     } catch (error) {
-        console.log(error)
         console.error('Error checking favorite:', error);
         res.status(500).json({ error: 'Failed to check favorite status' });
     }
@@ -118,29 +115,18 @@ app.get('/check-favorite/:recipeId', authenticateToken, async (req, res) => {
 
 // Add favorite recipe
 app.post('/add-favorite', authenticateToken, async (req, res) => {
-    const { spoonacularId, recipeId } = req.body;
+    const { recipeId } = req.body;
     const userId = req.user.id;
     console.log('Received request to add favorite:', { userId, recipeId });
     try {
-        console.log(userId)
-        console.log(recipeId)
-
-        const recipe = await prisma.recipe.findUnique({
-            where: { spoonacularId: parseInt(spoonacularId) },
+        const favorite = await prisma.userFavoriteRecipe.create({
+            data: {
+                userId: userId,
+                recipeId: parseInt(recipeId)
+            },
         });
-        console.log("recipe", recipe)
-        if (recipe) {
-            const favorite = await prisma.userFavoriteRecipe.create({
-                data: {
-                    user: { connect: { id: userId }},
-                    recipe: { connect: { id: recipeId }}
-                },
-            });
-            console.log('Favorite added successfully:', favorite);
-            res.status(201).json(favorite);
-        } else {
-            res.status(404).json({ error: 'Recipe not found' });
-        }
+        console.log('Favorite added successfully:', favorite);
+        res.status(201).json(favorite);
     } catch (error) {
         console.error('Detailed error adding favorite:', error);
         res.status(500).json({
@@ -152,7 +138,6 @@ app.post('/add-favorite', authenticateToken, async (req, res) => {
     }
 });
 
-
 // Remove favorite recipe
 app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => {
     const { recipeId } = req.params;
@@ -160,16 +145,10 @@ app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => 
     console.log('Received request to delete favorite:', { userId, recipeId });
 
     try {
-        const recipe = await prisma.recipe.findUnique({
-            where: { spoonacularId: parseInt(recipeId) },
-        });
-        if (!recipe) {
-            return res.status(404).json({ error: 'Recipe not found' });
-        }
         await prisma.userFavoriteRecipe.deleteMany({
             where: {
                 userId: userId,
-                recipeId: recipe.id
+                recipeId: parseInt(recipeId)
             },
         });
 
@@ -180,67 +159,68 @@ app.delete('/remove-favorite/:recipeId', authenticateToken, async (req, res) => 
     }
 });
 
-
-app.get('/recipes', async (req, res) => {
-    const offset = parseInt(req.query.offset) || 0;
-    const limit = parseInt(req.query.limit) || 60;
-
+// Fetching favorites
+app.get('/favorite-recipes', authenticateToken, async (req, res) => {
+    const userId = req.user.id;
     try {
-        const recipes = await prisma.recipe.findMany({
-            skip: offset,
-            take: limit,
+        const favorites = await prisma.userFavoriteRecipe.findMany({
+            where: {
+                userId: userId
+            },
+            select: {
+                recipeId: true
+            }
         });
-        res.json({ recipes });
+        const favoriteIds = favorites.map(fav => fav.recipeId);
+        res.json(favoriteIds);
     } catch (error) {
-        console.error('Error fetching recipes:', error);
-        res.status(500).json({ error: 'Failed to fetch recipes' });
+        console.error('Error fetching favorite recipes:', error);
+        res.status(500).json({ error: 'Failed to fetch favorite recipes' });
     }
 });
-
-
 
 //storing
-async function fetchAndAddRecipes() {
-    try {
-        const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${process.env.VITE_API_KEY}`);
-        console.log(response);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        const recipes = data.recipes;
+// async function fetchAndAddRecipes() {
+//     try {
+//         const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${process.env.VITE_API_KEY}`);
+//         // console.log(response);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         const recipes = data.recipes;
 
-        for (let recipe of recipes) {
-            await prisma.recipe.upsert({
-                where: { spoonacularId: recipe.id },
-                update: {
-                    title: recipe.title,
-                    image: recipe.image,
-                    ingredients: JSON.stringify(recipe.extendedIngredients),
-                    instructions: recipe.instructions || '',
-                },
-                create: {
-                    spoonacularId: recipe.id,
-                    title: recipe.title,
-                    image: recipe.image,
-                    ingredients: JSON.stringify(recipe.extendedIngredients),
-                    instructions: recipe.instructions || '',
-                },
-            });
-        }
+//         for (let recipe of recipes) {
+//             await prisma.recipe.upsert({
+//                 where: { spoonacularId: recipe.id },
+//                 update: {
+//                     title: recipe.title,
+//                     image: recipe.image,
+//                     ingredients: JSON.stringify(recipe.extendedIngredients),
+//                     instructions: recipe.instructions || '',
+//                 },
+//                 create: {
+//                     spoonacularId: recipe.id,
+//                     title: recipe.title,
+//                     image: recipe.image,
+//                     ingredients: JSON.stringify(recipe.extendedIngredients),
+//                     instructions: recipe.instructions || '',
+//                 },
+//             });
+//         }
 
-        console.log('Recipes added successfully');
-    } catch (error) {
-        console.error('Error adding recipes:', error);
-    }
-}
+//         console.log('Recipes added successfully');
+//     } catch (error) {
+//         console.error('Error adding recipes:', error);
+//     }
+// }
 
-cron.schedule('0 */6 * * *', () => {
-    console.log('Running cron job to add recipes');
-    fetchAndAddRecipes();
-});
+// cron.schedule('0 */6 * * *', () => {
+//     console.log('Running cron job to add recipes');
+//     fetchAndAddRecipes();
+// });
 
-fetchAndAddRecipes();
+// fetchAndAddRecipes();
 
 app.get('/', async (req, res) => {
     res.send(`Welcome to Aniyah's Capstone!`);

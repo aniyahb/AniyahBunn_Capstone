@@ -82,3 +82,24 @@
     text-align: center;
     }
 }
+
+
+.userActions {
+    display: flex;
+    align-items: center;
+}
+
+.favorites {
+    margin-top: 17.5px;
+    margin-right: 110px;
+    cursor: pointer;
+}
+
+.favorites:hover {
+    color: #ff4081; /* Or any color you prefer for hover state */
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}

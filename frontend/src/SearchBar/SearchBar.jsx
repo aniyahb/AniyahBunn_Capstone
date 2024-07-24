@@ -9,11 +9,22 @@ function SearchBar ({ setSearch }){
     const [input, setInput] = useState('');
     const navigate = useNavigate()
 
-
-    const submitHandler = (e) =>{
+    const submitHandler = (e) => {
         e.preventDefault();
-        navigate('/searched/'+input);
+        if (input.trim()) {
+            navigate('/searched/' + input);
+        }
+    }
 
+    const handleSearchIconClick = () => {
+        if (input.trim()) {
+            navigate('/searched/' + input);
+        }
+    }
+
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+        setSearch(e.target.value);
     }
 
     return(
@@ -23,12 +34,10 @@ function SearchBar ({ setSearch }){
         type="text"
         value={input}
         placeholder="Search..."
-        onChange={(e)=> {
-            setInput(e.target.value)
-            setSearch(e.target.value)}}
+        onChange={handleInputChange}
         />
 
-        <div className='searchIcon'>
+        <div className='searchIcon' onClick={handleSearchIconClick}>
         <CiSearch> </CiSearch>
         </div>
 

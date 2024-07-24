@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user{
+model user {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
@@ -25,27 +25,23 @@ model user{
 }
 
 model Recipe {
-  id           Int       @id @default(autoincrement())
-  spoonacularId Int                  @unique
-  title        String
-  image        String
-  ingredients  String
-  instructions String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  favoritedBy    UserFavoriteRecipe[]
+  id            Int      @id @default(autoincrement())
+  spoonacularId Int      @unique
+  title         String
+  image         String
+  ingredients   String
+  instructions  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
-model UserFavoriteRecipe{
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  recipeId    Int
-  createdAt    DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  user        user      @relation(fields: [userId], references: [id])
-  recipe      Recipe    @relation(fields: [recipeId], references: [id])
+model UserFavoriteRecipe {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  recipeId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      user     @relation(fields: [userId], references: [id])
 
   @@unique([userId, recipeId])
 }

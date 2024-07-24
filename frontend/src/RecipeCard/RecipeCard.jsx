@@ -13,22 +13,41 @@ const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError ,
         setModalOpen(true);
     };
 
-        const checkFavoriteStatus = async () => {
-            if (!isAuthenticated || !token) return;
-            try {
-                const response = await fetch(`http://localhost:2500/check-favorite/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                if (!response.ok) throw new Error('Failed to check favorite status');
-                const data = await response.json();
-                console.log(data.isFavorite)
-                setIsFav(!data.isFavorite);
+    const checkFavoriteStatus = async () => {
+        if (!isAuthenticated || !token) return;
+        try {
+            const response = await fetch(`http://localhost:2500/check-favorite/${recipeId}`, {
+                headers: {
+                'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) throw new Error('Failed to check favorite status');
+            const data = await response.json();
+            setIsFav(!!data.isFavorite);
             } catch (error) {
-                console.error('Error checking favorite status:', error);
+            console.error('Error checking favorite status:', error);
             }
         };
+        // const checkFavoriteStatus = async () => {
+        //     if (!isAuthenticated || !token) return;
+        //     try {
+        //         const response = await fetch(`http://localhost:2500/check-favorite/${recipeId}`, {
+        //             headers: {
+        //                 'Authorization': `Bearer ${token}`,
+        //             },
+        //         });
+        //         if (!response.ok) throw new Error('Failed to check favorite status');
+        //         const data = await response.json();
+        //         console.log(data.isFavorite)
+        //         setIsFav(data.isFavorite);
+        //     } catch (error) {
+        //         console.error('Error checking favorite status:', error);
+        //     }
+        // };
+
+        useEffect(() => {
+            checkFavoriteStatus();
+        }, [isAuthenticated, token, id]);
 
         const handleAddFavorite = async (e) => {
             e.stopPropagation();
@@ -37,33 +56,76 @@ const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError ,
                 return;
                 }
                 try {
-                const currentFavStatus = await checkFavoriteStatus();
-                setIsFav(currentFavStatus)
                 const headers = {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 };
                 if (isFav) {
-                    await fetch(`http://localhost:2500/remove-favorite/${key}`, {
-                    method: 'DELETE',
-                    headers,
-                    credentials: 'include'
+                    const response = await fetch(`http://localhost:2500/remove-favorite/${recipeId}`, {
+                        method: 'DELETE',
+                        headers,
+                        credentials: 'include'
                     });
-                    console.log(`Recipe with ID ${key} was removed from favorites.`);
+                    if (response.ok) {
+                        console.log(`Recipe with ID ${id} was removed from favorites.`);
+                        setIsFav(false);
+                    } else {
+                    throw new Error('Failed to remove favorite');
+                    }
                 } else {
-                    await fetch("http://localhost:2500/add-favorite", {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({ spoonacularId: key , recipeId}),
-                    credentials: 'include'
+                    const response = await fetch("http://localhost:2500/add-favorite", {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ recipeId: recipeId }),
+                        credentials: 'include'
                     });
-                    console.log(`Adding recipe with ID ${key} to favorites`);
+                    if (response.ok) {
+                        console.log(`Adding recipe with ID ${recipeId} to favorites`);
+                        setIsFav(true);
+                    } else {
+                        throw new Error('Failed to add favorite');
+                    }
                 }
-                setIsFav(!isFav);
                 } catch (error) {
-                console.error('Error updating favorite:', error);
+                    console.error('Error updating favorite:', error);
+                    onAuthError("Failed to update favorite status");
                 }
             };
+
+        // const handleAddFavorite = async (e) => {
+        //     e.stopPropagation();
+        //     if (!isAuthenticated) {
+        //         onAuthError("Please log in to add favorites");
+        //         return;
+        //         }
+        //         try {
+        //         const currentFavStatus = await checkFavoriteStatus();
+        //         setIsFav(currentFavStatus)
+        //         const headers = {
+        //             'Authorization': `Bearer ${token}`,
+        //             'Content-Type': 'application/json'
+        //         };
+        //         if (isFav) {
+        //             await fetch(`http://localhost:2500/remove-favorite/${key}`, {
+        //             method: 'DELETE',
+        //             headers,
+        //             credentials: 'include'
+        //             });
+        //             console.log(`Recipe with ID ${key} was removed from favorites.`);
+        //         } else {
+        //             await fetch("http://localhost:2500/add-favorite", {
+        //             method: 'POST',
+        //             headers,
+        //             body: JSON.stringify({ spoonacularId: key , recipeId}),
+        //             credentials: 'include'
+        //             });
+        //             console.log(`Adding recipe with ID ${key} to favorites`);
+        //         }
+        //         setIsFav(!isFav);
+        //         } catch (error) {
+        //         console.error('Error updating favorite:', error);
+        //         }
+        //     };
 
         return (
             <div className="recipeCard" onClick={handleClick}>
