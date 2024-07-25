@@ -199,22 +199,6 @@ async function sendEmail(to, subject, text) {
     console.log('Message sent: %s', info.messageId);
 }
 
-// Getting user's favorite recipes
-async function getUserFavoriteRecipes(userId) {
-    const favorites = await prisma.userFavoriteRecipe.findMany({
-        where: {
-            userId: userId
-        },
-        select: {
-            recipeId: true
-        }
-    });
-
-    return favorites.map(fav => fav.recipeId);
-}
-
-
-
 // Sending favorite recipes summary
 async function sendFavoriteRecipesSummary() {
     const users = await prisma.user.findMany();
@@ -223,9 +207,7 @@ async function sendFavoriteRecipesSummary() {
         const favoriteCount = await prisma.userFavoriteRecipe.count({
             where: { userId: user.id }
         });
-
         let summary = `Hey ${user.name}! 👋\n\n`;
-
         if (favoriteCount > 0) {
             summary += `🎉 Great news! You have ${favoriteCount} favorite recipe${favoriteCount > 1 ? 's' : ''} saved in your MealMaster collection!\n\n`;
             summary += `🍽️ Ready to explore your culinary treasures? Log in to view your favorites and get cooking!\n`;
@@ -236,16 +218,13 @@ async function sendFavoriteRecipesSummary() {
             summary += `🔍 Log in to MealMaster and start exploring delicious recipes. Save the ones you love!\n`;
             summary += `🔗 Start your flavor journey here: http://localhost:5173/login\n\n`;
         }
-
         summary += `🌟 Feeling adventurous? Here are some ideas to spice up your cooking routine:\n`;
         summary += `- Try a new cuisine this week\n`;
         summary += `- Challenge yourself to cook with a ingredient you've never used before\n`;
         summary += `- Host a virtual cooking party with friends\n\n`;
-
         summary += `💡 Don't forget to keep adding to your favorites. The more you save, the more delicious options you'll have at your fingertips!\n\n`;
         summary += `Happy cooking, and enjoy your MealMaster experience!\n\n`;
         summary += `Bon appétit! 🥘✨\n`;
-
         await sendEmail(user.email, '🍽️ Your MealMaster Favorites Await!', summary);
     }
 }
