@@ -29,6 +29,14 @@
 
 }
 
-h1{
+.favs{
     font-family: Didot, serif ;
+    font-size: x-large;
+    margin-left: 20px;
+}
+
+.fav-recipe-list{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
 }

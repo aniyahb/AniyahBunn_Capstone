@@ -5,10 +5,13 @@ import missingImage from "../assets/placeholder_img.jpeg";
 import { Link } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
 import Profile from '../Profile/Profile';
+import FavoritesModal from '../FavoritesModal/FavoritesModal';
 
 const FavoriteRecipesPage = () => {
     const [favoriteRecipes, setFavoriteRecipes] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [pickedRecipe, setPickedRecipe] = useState(null);
 
     useEffect(() => {
         checkAuthStatus();
@@ -44,43 +47,56 @@ const FavoriteRecipesPage = () => {
         console.log(message);
     };
 
-    const handlePickedRecipe = (id) => {
-        console.log(`Recipe picked: ${id}`);
-    };
+    const handlePickedRecipe = (recipe) => {
+        setPickedRecipe(recipe);
+        setModalOpen(true);
+        };
 
-    return (
-        <>
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setPickedRecipe(null);
+        };
 
-        <header className='favoritePageHeader'>
-        <div className='favoritePageTitle'>
-            <Link to="/HomePage" className="home-icon" >
-                <CiHome />
-            </Link>
-            MealMaster</div>
-        <div className='profile'><span><Profile/></span></div>
-        </header>
-        <div className="favorite-recipes-page">
-            <h1>Favorite Recipes</h1>
-            <div className="recipe-list">
-                {favoriteRecipes.map(recipe => (
-                    <RecipeCard
+
+        return (
+            <>
+                <header className='favoritePageHeader'>
+                    <div className='favoritePageTitle'>
+                    <Link to="/HomePage" className="home-icon" >
+                        <CiHome />
+                    </Link>
+                    MealMaster
+                    </div>
+                    <div className='profile'><span><Profile/></span></div>
+                </header>
+
+                {modalOpen && pickedRecipe &&
+                    <FavoritesModal
+                    pickedRecipe={pickedRecipe}
+                    closeModal={handleCloseModal}
+                    />
+                }
+                <div className="favorite-recipes-page">
+                    <div className='favs'>Favorite Recipes</div>
+                    <div className="fav-recipe-list">
+                    {favoriteRecipes.map(recipe => (
+                        <RecipeCard
                         key={recipe.id}
                         id={recipe.id}
                         recipeId={recipe.id}
-                        setPickedRecipe={handlePickedRecipe}
                         title={recipe.title}
                         image={recipe.image || missingImage}
                         cuisines={recipe.cuisines}
-                        handlePickedRecipe={() => handlePickedRecipe(recipe.id)}
+                        handlePickedRecipe={() => handlePickedRecipe(recipe)}
                         isAuthenticated={isAuthenticated}
                         onAuthError={handleAuthError}
-                    />
-                ))}
-            </div>
-        </div>
-        </>
-
-    );
-};
+                        setModalOpen={setModalOpen}
+                        />
+                    ))}
+                    </div>
+                </div>
+                </>
+            );
+    };
 
 export default FavoriteRecipesPage;

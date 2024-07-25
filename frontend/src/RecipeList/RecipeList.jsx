@@ -8,10 +8,6 @@ const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [pickedRecipe, setPickedRecipe] = useState(null);
-    const [sortBy, setSortBy] = useState('Popular');
-    const [search, setSearch] = useState("");
-    const [url, setUrl] = useState('')
-    const [offset, setOffset] = useState(0);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [page, setPage] = useState(1);
 
@@ -35,10 +31,7 @@ const RecipeList = () =>{
         const saveToLocalStorage = (recipes) => {
             const existingRecipes = JSON.parse(localStorage.getItem('allRecipes') || '[]');
             const updatedRecipes = [...existingRecipes, ...recipes];
-
-            // Keep only the most recent MAX_RECIPES
             const trimmedRecipes = updatedRecipes.slice(-MAX_RECIPES);
-
             try {
                 localStorage.setItem('allRecipes', JSON.stringify(trimmedRecipes));
                 } catch (e) {
@@ -47,7 +40,6 @@ const RecipeList = () =>{
                 localStorage.setItem('allRecipes', JSON.stringify(recipes));
                 }
             };
-
             useEffect(() => {
                 const loadInitialRecipes = async () => {
                     const storedRecipes = JSON.parse(localStorage.getItem('allRecipes') || '[]');
@@ -62,7 +54,6 @@ const RecipeList = () =>{
                     checkAuthStatus();
                 }, []);
 
-
     const checkAuthStatus = () => {
         const token = localStorage.getItem('token');
         setIsAuthenticated(!!token);
@@ -71,17 +62,15 @@ const RecipeList = () =>{
 
     const handleAuthError = (message) => {
         console.log(message);
-
     };
 
     const handleLoadMore = async () => {
         const nextPage = page + 1;
         const newRecipes = await fetchRecipes(nextPage);
         setPopular(prevRecipes => {
-            // Remove duplicates based on id
             const uniqueRecipes = [...prevRecipes, ...newRecipes].filter(
                 (recipe, index, self) =>
-                    index === self.findIndex((t) => t.id === recipe.id)
+                index === self.findIndex((t) => t.id === recipe.id)
                 );
                 return uniqueRecipes.slice(-MAX_RECIPES);
             });
@@ -115,7 +104,6 @@ const RecipeList = () =>{
                         recipeId={recipe.id}
                         id={recipe.spoonacularId}
                         setPickedRecipe={setPickedRecipe}
-
                         title={recipe.title}
                         image={recipe.image || missingImage}
                         cuisines={recipe.cuisines}
