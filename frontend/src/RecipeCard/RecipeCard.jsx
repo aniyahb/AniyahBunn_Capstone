@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from 'react';
 
 
-const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError , handlePickedRecipe, setModalOpen  }) => {
+const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onAuthError , handlePickedRecipe, setModalOpen  }) => {
     const [isFav, setIsFav] = useState(false);
     const key = id
     const token = localStorage.getItem('token');
@@ -28,22 +28,6 @@ const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError ,
             console.error('Error checking favorite status:', error);
             }
         };
-        // const checkFavoriteStatus = async () => {
-        //     if (!isAuthenticated || !token) return;
-        //     try {
-        //         const response = await fetch(`http://localhost:2500/check-favorite/${recipeId}`, {
-        //             headers: {
-        //                 'Authorization': `Bearer ${token}`,
-        //             },
-        //         });
-        //         if (!response.ok) throw new Error('Failed to check favorite status');
-        //         const data = await response.json();
-        //         console.log(data.isFavorite)
-        //         setIsFav(data.isFavorite);
-        //     } catch (error) {
-        //         console.error('Error checking favorite status:', error);
-        //     }
-        // };
 
         useEffect(() => {
             checkFavoriteStatus();
@@ -92,41 +76,6 @@ const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError ,
                 }
             };
 
-        // const handleAddFavorite = async (e) => {
-        //     e.stopPropagation();
-        //     if (!isAuthenticated) {
-        //         onAuthError("Please log in to add favorites");
-        //         return;
-        //         }
-        //         try {
-        //         const currentFavStatus = await checkFavoriteStatus();
-        //         setIsFav(currentFavStatus)
-        //         const headers = {
-        //             'Authorization': `Bearer ${token}`,
-        //             'Content-Type': 'application/json'
-        //         };
-        //         if (isFav) {
-        //             await fetch(`http://localhost:2500/remove-favorite/${key}`, {
-        //             method: 'DELETE',
-        //             headers,
-        //             credentials: 'include'
-        //             });
-        //             console.log(`Recipe with ID ${key} was removed from favorites.`);
-        //         } else {
-        //             await fetch("http://localhost:2500/add-favorite", {
-        //             method: 'POST',
-        //             headers,
-        //             body: JSON.stringify({ spoonacularId: key , recipeId}),
-        //             credentials: 'include'
-        //             });
-        //             console.log(`Adding recipe with ID ${key} to favorites`);
-        //         }
-        //         setIsFav(!isFav);
-        //         } catch (error) {
-        //         console.error('Error updating favorite:', error);
-        //         }
-        //     };
-
         return (
             <div className="recipeCard" onClick={handleClick}>
                 <div className='recipeContent'>
@@ -134,7 +83,9 @@ const RecipeCard = ({ id, image, title, recipeId, isAuthenticated, onAuthError ,
                     <img className ="image" src= {image} />
                     <h2 className = "recipeName" > {title}</h2>
                     <div className='underName'>
-                    <h3 className= "cuisine"> Cuisines:</h3>
+
+                    <div className="cuisines">
+                        {cuisines && cuisines.length > 0? cuisines[0] : 'No Cuisine'}</div>
                     <div className= "favRecipe">
                     <a className="favoriteIcon" onClick={handleAddFavorite}>
                     <i className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
