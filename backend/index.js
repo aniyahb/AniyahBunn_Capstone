@@ -250,7 +250,7 @@ async function sendFavoriteRecipesSummary() {
     }
 }
 
-cron.schedule('*/2 * * * *', () => {
+cron.schedule('0 0 * * *', () => {
     console.log('Running cron job to send favorite recipes summary');
     sendFavoriteRecipesSummary().catch(console.error);
 });
