@@ -9,6 +9,7 @@ app.use(express.json())
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
 
+const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
@@ -79,8 +80,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-
+// Authenication Token
 const authenticateToken = (req, res, next) => {
     console.log("AAAA")
     const authHeader = req.headers['authorization'];
@@ -178,6 +178,63 @@ app.get('/favorite-recipes', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch favorite recipes' });
     }
 });
+
+// Emailing W/ Cron
+async function sendEmail(to, subject, text) {
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+    let info = await transporter.sendMail({
+        from: ' "MealMaster" <mealmasterupdates@gmail.com>',
+        to: to,
+        subject: subject,
+        text: text
+    });
+    console.log('Message sent: %s', info.messageId);
+}
+
+// Sending favorite recipes summary
+async function sendFavoriteRecipesSummary() {
+    const users = await prisma.user.findMany();
+
+    for (const user of users) {
+        const favoriteCount = await prisma.userFavoriteRecipe.count({
+            where: { userId: user.id }
+        });
+        let summary = `Hey ${user.name}! 👋\n\n`;
+        if (favoriteCount > 0) {
+            summary += `🎉 Great news! You have ${favoriteCount} favorite recipe${favoriteCount > 1 ? 's' : ''} saved in your MealMaster collection!\n\n`;
+            summary += `🍽️ Ready to explore your culinary treasures? Log in to view your favorites and get cooking!\n`;
+            summary += `🔗 Visit MealMaster here: http://localhost:5173/login\n\n`;
+            summary += `👨‍🍳 Remember, the kitchen is your playground. Why not try one of your favorites this week?\n\n`;
+        } else {
+            summary += `🍳 It looks like you haven't saved any favorite recipes yet. No worries – the culinary world is waiting for you!\n\n`;
+            summary += `🔍 Log in to MealMaster and start exploring delicious recipes. Save the ones you love!\n`;
+            summary += `🔗 Start your flavor journey here: http://localhost:5173/login\n\n`;
+        }
+        summary += `🌟 Feeling adventurous? Here are some ideas to spice up your cooking routine:\n`;
+        summary += `- Try a new cuisine this week\n`;
+        summary += `- Challenge yourself to cook with a ingredient you've never used before\n`;
+        summary += `- Host a virtual cooking party with friends\n\n`;
+        summary += `💡 Don't forget to keep adding to your favorites. The more you save, the more delicious options you'll have at your fingertips!\n\n`;
+        summary += `Happy cooking, and enjoy your MealMaster experience!\n\n`;
+        summary += `Bon appétit! 🥘✨\n`;
+        await sendEmail(user.email, '🍽️ Your MealMaster Favorites Await!', summary);
+    }
+}
+
+cron.schedule('0 0 * * *', () => {
+    console.log('Running cron job to send favorite recipes summary');
+    sendFavoriteRecipesSummary().catch(console.error);
+});
+
+
 
 //storing
 // async function fetchAndAddRecipes() {
