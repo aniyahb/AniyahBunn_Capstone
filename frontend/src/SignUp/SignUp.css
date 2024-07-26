@@ -74,14 +74,14 @@
     border:none;
     outline:none;
     color:#030303;
-    font-size: 13px;
+    font-size: 10px;
     border-radius: 4px;
 }
 
 .signUpInputs ::placeholder{
     color: black;
     padding-left: 10px;
-    font-size: 15px;
+    font-size: 10px;
 }
 
 

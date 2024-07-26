@@ -1,6 +1,7 @@
 import './SignUp.css'
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom"
+import Footer from '../Footer/Footer';
 
 
 
@@ -66,66 +67,70 @@ function SignUp(){
 //_________________________________________________________________
 
     return(
-        <div className='signUpBody'>
-            <div className="signUpTitle">MealMaster</div>
-            <div className='signUpContainer'>
-                <div className='signUpHeader'>
-                    <div className='signUpLable'>Sign Up</div>
-                    <div className="signUpUnderline"></div>
-                </div>
+        <div className="page-container">
+        <div className="content-wrap">
+            <div className='signUpBody'>
+                <div className="signUpTitle">MealMaster</div>
+                <div className='signUpContainer'>
+                    <div className='signUpHeader'>
+                        <div className='signUpLable'>Sign Up</div>
+                        <div className="signUpUnderline"></div>
+                    </div>
                     <form onSubmit={handleSignUp}>
-                    <div className='signUpInputs'>
-                        <input
-                            type='text'
-                            placeholder='Name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
+                        <div className='signUpInputs'>
+                            <input
+                                type='text'
+                                placeholder='Name'
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
                             />
-                    </div>
+                        </div>
 
-                    <div className='signUpInputs'>
-                        <input
-                            type='email'
-                            placeholder='Email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
+                        <div className='signUpInputs'>
+                            <input
+                                type='email'
+                                placeholder='Email'
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
-                    </div>
+                        </div>
 
-                    <div className='signUpInputs'>
-                        <input
-                            type='password'
-                            placeholder='Password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                        <div className='signUpInputs'>
+                            <input
+                                type='password'
+                                placeholder='Password'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
                             />
-                    </div>
+                        </div>
+                        <div className='signUpInputs'>
+                                <input
+                                    type='password'
+                                    placeholder='Confirm Password'
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
 
-                    <div className='signUpInputs'>
-                        <input
-                            type='password'
-                            placeholder='Confirm Password'
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                            />
+                            <p className='existingAccount'>
+                                Already Have An Account?{' '}
+                                <a className='logInLink' onClick={goToLogin}>
+                                    Login
+                                </a>
+                            </p>
+                            <button className='signUpButton'>Sign Up</button>
+                        </form>
                     </div>
-
-                        <p className='existingccount'>
-                            Already Have An Account?{' '}
-                            <a className='logInLink' onClick={goToLogin}>
-                                Login
-                            </a>
-                        </p>
-                        <button className='signUpButton'>Sign Up</button>
-                    </form>
                 </div>
+            </div>
+            <Footer />
+        </div>
 
-    </div>
-    )
+        )
 
     }
 
