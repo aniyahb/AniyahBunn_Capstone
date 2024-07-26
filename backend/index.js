@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 2500
 app.use(express.json())
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
-
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
@@ -234,50 +233,6 @@ cron.schedule('0 0 * * *', () => {
     sendFavoriteRecipesSummary().catch(console.error);
 });
 
-
-
-//storing
-// async function fetchAndAddRecipes() {
-//     try {
-//         const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=${process.env.VITE_API_KEY}`);
-//         // console.log(response);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         const recipes = data.recipes;
-
-//         for (let recipe of recipes) {
-//             await prisma.recipe.upsert({
-//                 where: { spoonacularId: recipe.id },
-//                 update: {
-//                     title: recipe.title,
-//                     image: recipe.image,
-//                     ingredients: JSON.stringify(recipe.extendedIngredients),
-//                     instructions: recipe.instructions || '',
-//                 },
-//                 create: {
-//                     spoonacularId: recipe.id,
-//                     title: recipe.title,
-//                     image: recipe.image,
-//                     ingredients: JSON.stringify(recipe.extendedIngredients),
-//                     instructions: recipe.instructions || '',
-//                 },
-//             });
-//         }
-
-//         console.log('Recipes added successfully');
-//     } catch (error) {
-//         console.error('Error adding recipes:', error);
-//     }
-// }
-
-// cron.schedule('0 */6 * * *', () => {
-//     console.log('Running cron job to add recipes');
-//     fetchAndAddRecipes();
-// });
-
-// fetchAndAddRecipes();
 
 app.get('/', async (req, res) => {
     res.send(`Welcome to Aniyah's Capstone!`);

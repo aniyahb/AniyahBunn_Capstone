@@ -63,7 +63,6 @@ const RecipeList = () =>{
         setIsAuthenticated(!!token);
     };
 
-
     const handleAuthError = (message) => {
         console.log(message);
     };
