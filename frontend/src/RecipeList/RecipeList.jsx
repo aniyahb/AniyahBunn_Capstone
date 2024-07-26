@@ -3,6 +3,7 @@ import './RecipeList.css';
 import RecipeCard from "../RecipeCard/RecipeCard";
 import Modal from "../Modal/Modal";
 import missingImage from "../assets/placeholder_img.jpeg";
+import LoadingScreen from "../Loading/Loading";
 
 const RecipeList = () =>{
     const [popular, setPopular] = useState([]);
@@ -10,22 +11,30 @@ const RecipeList = () =>{
     const [pickedRecipe, setPickedRecipe] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const MAX_RECIPES = 419;
     const fetchRecipes = async (pageNumber) => {
         try {
+            setIsLoading(true);
             const response = await fetch(`https://api.spoonacular.com/recipes/random?number=60&apiKey=${import.meta.env.VITE_API_KEY}`);
             if (!response.ok) {
                 throw new Error('Failed to get recipes');
             }
             const data = await response.json();
             saveToLocalStorage(data.recipes);
+
             return data.recipes;
+
             } catch (error) {
             console.error('Error fetching recipes:', error.message);
             return [];
+            } finally{
+                setIsLoading(false)
             }
+
+
         };
 
         const saveToLocalStorage = (recipes) => {
@@ -65,6 +74,7 @@ const RecipeList = () =>{
     };
 
     const handleLoadMore = async () => {
+
         const nextPage = page + 1;
         const newRecipes = await fetchRecipes(nextPage);
         setPopular(prevRecipes => {
@@ -76,6 +86,7 @@ const RecipeList = () =>{
             });
             setPage(nextPage);
             };
+
 
 
     const handlePickedRecipe = (id) => {
@@ -96,6 +107,7 @@ const RecipeList = () =>{
         return (
 
             <>
+            {isLoading && <LoadingScreen />}
         {modalOpen && pickedRecipe && <Modal showModal={handleOpenModal} pickedRecipe={pickedRecipe} closeModal={handleCloseModal}/>}
             <div className="recipe-list">
                 {popular.map((recipe,index) => (

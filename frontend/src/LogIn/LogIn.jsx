@@ -2,7 +2,7 @@ import './LogIn.css'
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 import {useNavigate} from "react-router-dom"
-
+import LoadingScreen from '../Loading/Loading';
 
 function LogIn(){
     const [email, setEmail] = useState('');
@@ -10,13 +10,15 @@ function LogIn(){
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false);
+
 
 
 
     async function handleLogIn(event){
         event.preventDefault();
         setError(null);
-        setLoading(true);
+        setIsLoading(true);
 
 
         if(!email || !password){
@@ -25,7 +27,7 @@ function LogIn(){
         }
 
         try{
-            setLoading(true);
+            setIsLoading(true);
             const response = await fetch("http://localhost:2500/login",{
                 method:"POST",
                 headers:{
@@ -52,12 +54,16 @@ function LogIn(){
             console.error('Login error:', error);
             setError('An error occurred. Please try again.');
         }   finally{
-            setLoading(false)
+            setIsLoading(false)
         }
     }
 
 //_________________________________________________________________
     return(
+        <>
+        <div>
+        {isLoading && <LoadingScreen />}
+
         <div className='logInBody'>
             <div className="logInTitle">MealMaster</div>
             <div className='logInContainer'>
@@ -92,12 +98,13 @@ function LogIn(){
                             </Link>
                         </p>
                         <button className='logInButton' type="submit" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
+                        {isLoading ? 'Logging in...' : 'Login'}
                         </button>
                     </form>
             </div>
     </div>
-
+    </div>
+</>
     )
 }
 
