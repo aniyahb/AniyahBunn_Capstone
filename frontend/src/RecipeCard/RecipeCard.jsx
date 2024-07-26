@@ -85,7 +85,7 @@ const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onA
                     <div className='underName'>
 
                     <div className="cuisines">
-                        {cuisines && cuisines.length > 0? cuisines[0] : 'No Cuisine'}</div>
+                        {cuisines && cuisines.length > 0? cuisines[0] : ''}</div>
                     <div className= "favRecipe">
                     <a className="favoriteIcon" onClick={handleAddFavorite}>
                     <i className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>

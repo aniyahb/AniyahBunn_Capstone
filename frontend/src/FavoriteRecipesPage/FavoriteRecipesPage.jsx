@@ -6,12 +6,15 @@ import { Link } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
 import Profile from '../Profile/Profile';
 import FavoritesModal from '../FavoritesModal/FavoritesModal';
+import LoadingScreen from '../Loading/Loading';
 
 const FavoriteRecipesPage = () => {
     const [favoriteRecipes, setFavoriteRecipes] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [pickedRecipe, setPickedRecipe] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
         checkAuthStatus();
@@ -25,6 +28,7 @@ const FavoriteRecipesPage = () => {
 
     const fetchFavoriteRecipes = async () => {
         try {
+            setIsLoading(true )
             const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:2500/favorite-recipes', {
                 headers: {
@@ -40,7 +44,10 @@ const FavoriteRecipesPage = () => {
             setFavoriteRecipes(favorites);
         } catch (error) {
             console.error('Error fetching favorite recipes:', error);
+        } finally{
+            setIsLoading(false)
         }
+
     };
 
     const handleAuthError = (message) => {
@@ -78,6 +85,7 @@ const FavoriteRecipesPage = () => {
                 }
                 <div className="favorite-recipes-page">
                     <div className='favs'>Favorite Recipes</div>
+                    {isLoading && <LoadingScreen />}
                     <div className="fav-recipe-list">
                     {favoriteRecipes.map(recipe => (
                         <RecipeCard
