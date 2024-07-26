@@ -9,24 +9,17 @@ function LogIn(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false);
-
-
-
 
     async function handleLogIn(event){
         event.preventDefault();
         setError(null);
         setIsLoading(true);
-
-
         if(!email || !password){
             setError("Fill out both fields")
             return;
         }
-
         try{
             setIsLoading(true);
             const response = await fetch("http://localhost:2500/login",{
@@ -40,14 +33,11 @@ function LogIn(){
                 }),
                 credentials: 'include'
             });
-
             const data = await response.json();
-
             if(response.ok){
                 console.log("Logged in user:", data.user);
                 localStorage.setItem('token',data.token)
                 navigate("/HomePage");
-
             }else{
                 setError(data.error || 'Login failed');
             }
@@ -59,7 +49,6 @@ function LogIn(){
         }
     }
 
-//_________________________________________________________________
     return(
         <div className="page-container">
         <div className="content-wrap">
@@ -106,5 +95,4 @@ function LogIn(){
         </div>
     )
 }
-
 export default LogIn;

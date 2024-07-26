@@ -7,9 +7,9 @@ const Profile = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
-    };
+};
     return (
         <button className="profileButton" onClick={handleLogout}>Logout</button>
-    );
-    };
+);
+};
 export default Profile;

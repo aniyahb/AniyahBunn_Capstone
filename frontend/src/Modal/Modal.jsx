@@ -1,7 +1,6 @@
 import React from "react";
 import './Modal.css';
 import missingImage from "../assets/placeholder_img.jpeg";
-import RecipeList from "../RecipeList/RecipeList.jsx";
 
 const Modal = ({ pickedRecipe, closeModal}) => {
     const stripHtml = (html) => {

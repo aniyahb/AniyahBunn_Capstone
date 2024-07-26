@@ -30,3 +30,13 @@
     color: inherit;
 
 }
+
+.toFavorites{
+    margin-left: 1128px;
+    margin-top: 24px;
+    cursor: pointer;
+}
+
+.toFavorites:hover {
+    color: #ff4081;
+}

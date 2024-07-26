@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from 'react';
 import { CiSearch } from "react-icons/ci";
 import "./SearchBar.css"
@@ -36,12 +34,9 @@ function SearchBar ({ setSearch }){
         placeholder="Search..."
         onChange={handleInputChange}
         />
-
         <div className='searchIcon' onClick={handleSearchIconClick}>
         <CiSearch> </CiSearch>
         </div>
-
-
     </form>
 )
 }

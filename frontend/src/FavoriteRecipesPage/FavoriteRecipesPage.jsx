@@ -48,7 +48,6 @@ const FavoriteRecipesPage = () => {
         } finally{
             setIsLoading(false)
         }
-
     };
 
     const handleAuthError = (message) => {
@@ -71,10 +70,10 @@ const FavoriteRecipesPage = () => {
             <div className="content-wrap">
                 <header className='favoritePageHeader'>
                     <div className='favoritePageTitle'>
+                    MealMaster
                     <Link to="/HomePage" className="home-icon" >
                         <CiHome />
                     </Link>
-                    MealMaster
                     </div>
                     <div className='profile'><span><Profile/></span></div>
                 </header>

@@ -25,8 +25,6 @@
     transform: scale(1.02);
 }
 
-
-
 .image{
     height: 170px;
     width: 205px;
@@ -46,7 +44,6 @@
     width:200px;
     color: black;
 }
-
 
 .favoriteIcon{
     display: flex;
