@@ -16,6 +16,9 @@ const FavoriteRecipesPage = () => {
     const [pickedRecipe, setPickedRecipe] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [pickedIngredients, setPickedIngredients] = useState(null);
+    const [pickedInstructions, setPickedInstructions] = useState(null);
+
 
     useEffect(() => {
         checkAuthStatus();
@@ -54,9 +57,14 @@ const FavoriteRecipesPage = () => {
         console.log(message);
     };
 
-    const handlePickedRecipe = (recipe) => {
+    const handlePickedRecipe = async(recipe) => {
         setPickedRecipe(recipe);
         setModalOpen(true);
+
+        const ingredients = await getIngredientsById(recipe.id);
+        const instructions = await getInstructionsById(recipe.id);
+        setPickedIngredients(ingredients);
+        setPickedInstructions(instructions);
         };
 
     const handleCloseModal = () => {
@@ -68,6 +76,31 @@ const FavoriteRecipesPage = () => {
         setFavoriteRecipes(prevFavorites =>
         prevFavorites.filter(recipe => recipe.id !== removedRecipeId)
         );
+        };
+
+
+        const getIngredientsById = async (id) => {
+            try {
+                const response = await fetch(`https://api.spoonacular.com/recipes/${id}/ingredientWidget.json?apiKey=${import.meta.env.VITE_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch ingredients');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching ingredients:', error.message);
+            }
+        };
+
+        const getInstructionsById = async (id) => {
+            try {
+                const response = await fetch(`https://api.spoonacular.com/recipes/${id}/analyzedInstructions?apiKey=${import.meta.env.VITE_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch instructions');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching instructions:', error.message);
+            }
         };
 
         return (
@@ -86,6 +119,8 @@ const FavoriteRecipesPage = () => {
                     <FavoritesModal
                     pickedRecipe={pickedRecipe}
                     closeModal={handleCloseModal}
+                    ingredients={pickedIngredients}
+                    instructions={pickedInstructions}
                     />
                 }
                 <div className="favorite-recipes-page">

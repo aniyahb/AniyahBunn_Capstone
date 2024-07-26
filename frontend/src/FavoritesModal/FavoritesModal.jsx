@@ -1,7 +1,7 @@
 import React from 'react'
 import missingImage from "../assets/placeholder_img.jpeg";
 
-const FavoritesModal = ({ pickedRecipe, closeModal }) => {
+const FavoritesModal = ({ pickedRecipe, closeModal, ingredients, instructions  }) => {
     return(
         <div className="modal-overlay" onClick={closeModal}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -13,14 +13,30 @@ const FavoritesModal = ({ pickedRecipe, closeModal }) => {
             <ul>
                 {pickedRecipe?.extendedIngredients?.map((ingredient, index) => (
                 <li key={index}>{ingredient.original}</li>
-                ))}
+            ))}
             </ul>
+
+            <ul>
+                {ingredients?.ingredients?.map((ingredient, index) => (
+                <li key={index}>
+                    {ingredient.amount.us.value} {ingredient.amount.us.unit} {ingredient.name}
+                </li>
+            ))}
+            </ul>
+
             <h3 className="Instructions">Instructions:</h3>
             <ol>
                 {pickedRecipe?.analyzedInstructions?.[0]?.steps?.map((step, stepIndex) => (
                 <li key={stepIndex}>{step.step}</li>
                 ))}
             </ol>
+
+            <ol>
+                {instructions?.[0]?.steps?.map((step, stepIndex) => (
+                    <li key={stepIndex}>{step.step}</li>
+                ))}
+            </ol>
+
             </div>
         </div>
         </div>
