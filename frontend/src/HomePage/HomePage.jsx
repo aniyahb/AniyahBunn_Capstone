@@ -8,12 +8,10 @@ import Footer from '../Footer/Footer';
 
 function HomePage({ setSearch }) {
     const navigate = useNavigate();
-
     const handleFavoritesClick = () => {
         navigate('/favorites');
     }
 return(
-
     <>
     <div className='homepageBody'>
     <header className='homePageHeader'>
@@ -27,7 +25,6 @@ return(
         </div>
     </header>
     <div className='recipeList'><RecipeList/></div> </div>
-
     <div> <Footer /></div>
     </>
     )

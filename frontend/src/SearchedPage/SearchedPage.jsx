@@ -9,6 +9,8 @@ import { CiHome } from "react-icons/ci";
 import './SearchedPage.css'
 import LoadingScreen from "../Loading/Loading";
 import Footer from "../Footer/Footer";
+import { CiHeart } from "react-icons/ci";
+import { useNavigate } from 'react-router-dom';
 
 function SearchedPage(props){
     const [searchedRecipes, setSearchedRecipes] = useState ([])
@@ -17,27 +19,35 @@ function SearchedPage(props){
     const [pickedIngredients, setPickedIngredients] = useState ([])
     const [pickedInstructions, setPickedInstructions] = useState([])
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const checkAuthStatus = () => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+    };
 
     useEffect(() => {
         const getSearched= async (input) => {
+
             setIsLoading(true)
             try {
-
                 const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${input}&apiKey=${import.meta.env.VITE_API_KEY}&number=100`) ;
                 if (!response.ok) {
                     throw new Error('Failed to search recipes');
                 }
                 const data = await response.json();
-
                 setSearchedRecipes(data.results);
+                const allRecipes = JSON.parse(localStorage.getItem('allRecipes')) || [];
+                const newRecipes = data.results.filter(recipe => !allRecipes.some(r => r.id === recipe.id));
+                localStorage.setItem('allRecipes', JSON.stringify([...allRecipes, ...newRecipes]));
             } catch (error) {
                 console.error('Error fetching searched recipes:', error.message);
             } finally{
                 setIsLoading(false)
             }
-
+            checkAuthStatus();
         };
-
         getSearched(props.query);
     }, [props.query]);
 
@@ -48,6 +58,12 @@ function SearchedPage(props){
         getInstructionsById(recipe.id)
         setModalOpen(!modalOpen)
         setModalOpen(true);
+
+        const allRecipes = JSON.parse(localStorage.getItem('allRecipes')) || [];
+    if (!allRecipes.some(r => r.id === recipe.id)) {
+        localStorage.setItem('allRecipes', JSON.stringify([...allRecipes, recipe]));
+    }
+
     };
 
     const handleCloseModal = () => {
@@ -85,21 +101,30 @@ function SearchedPage(props){
             setPickedInstructions(data);
         }catch (error){
             console.error('Error fetching instructions:', error.message);
-    } finally{
+    }finally{
         setIsLoading(false)
     }
 }
+const handleFavoritesClick = () => {
+    navigate('/favorites');
+}
+const handleAuthError = (message) => {
+    console.log(message);
+};
 
     return(
         <div className="page-container">
         <div className="content-wrap">
             <header className='searchPageHeader'>
                 <div className='searchPageTitle'>
+                    MealMaster
                     <Link to="/HomePage" className="home-icon" >
                         <CiHome />
                     </Link>
-                    MealMaster
                 </div>
+                <div className='toFavorites' onClick={handleFavoritesClick}>
+                <CiHeart size={17} />
+            </div>
                 <div className='profile'><span><Profile/></span></div>
             </header>
 
@@ -114,10 +139,11 @@ function SearchedPage(props){
                 />
             }
             <div className="recipe-list">
-                {searchedRecipes.map((recipe) => (
+                {searchedRecipes.map((recipe,index) => (
                     <RecipeCard
-                        key={recipe.id}
-                        id={recipe.id}
+                        key={`${recipe.id}-${index}`}
+                        recipeId={recipe.id}
+                        id={recipe.spoonacularId}
                         setPickedRecipe={setPickedRecipe}
                         title={recipe.title}
                         image={recipe.image || missingImage}
@@ -126,6 +152,8 @@ function SearchedPage(props){
                         setModalOpen={setModalOpen}
                         pickedIngredients={pickedIngredients}
                         pickedInstructions={pickedInstructions}
+                        isAuthenticated={isAuthenticated}
+                        onAuthError={handleAuthError}
                     />
                 ))}
             </div>

@@ -63,9 +63,6 @@ function SignUp(){
         navigate('/logIn')
     }
 
-
-//_________________________________________________________________
-
     return(
         <div className="page-container">
         <div className="content-wrap">

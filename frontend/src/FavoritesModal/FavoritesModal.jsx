@@ -1,5 +1,4 @@
 import React from 'react'
-import './FavoritesModal.css'
 import missingImage from "../assets/placeholder_img.jpeg";
 
 const FavoritesModal = ({ pickedRecipe, closeModal }) => {

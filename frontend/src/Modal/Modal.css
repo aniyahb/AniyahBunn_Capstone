@@ -18,3 +18,17 @@
     border-radius: 20px;
     position: relative;
 }
+
+.recipeTitle{
+    font-family: Didot, serif;
+}
+
+.Instructions{
+    font-family: Didot, serif;
+    color: rgb(8, 108, 8);
+}
+
+.Ingredients{
+    font-family: Didot, serif;
+    color: rgb(8, 108, 8);
+}

@@ -37,14 +37,11 @@
     flex-shrink: 0;
 }
 
-
-
 .mainHeaderBody {
     display: flex;
     flex-direction: row;
     align-items: center;
     padding-top: 30px;
-
 }
 
 .mainHeaderHeader {
@@ -76,7 +73,6 @@
     flex-direction: row;
     align-items: stretch;
     }
-
     .homePageTitle, .searchBar, .profile {
     width: 100%;
     text-align: center;
@@ -96,7 +92,7 @@
 }
 
 .favorites:hover {
-    color: #ff4081; /* Or any color you prefer for hover state */
+    color: #ff4081;
 }
 
 .profile {

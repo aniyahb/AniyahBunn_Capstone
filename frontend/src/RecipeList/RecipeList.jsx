@@ -13,7 +13,6 @@ const RecipeList = () =>{
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
 
-
     const MAX_RECIPES = 419;
     const fetchRecipes = async (pageNumber) => {
         try {
@@ -24,17 +23,13 @@ const RecipeList = () =>{
             }
             const data = await response.json();
             saveToLocalStorage(data.recipes);
-
             return data.recipes;
-
             } catch (error) {
             console.error('Error fetching recipes:', error.message);
             return [];
             } finally{
                 setIsLoading(false)
             }
-
-
         };
 
         const saveToLocalStorage = (recipes) => {
@@ -74,7 +69,6 @@ const RecipeList = () =>{
     };
 
     const handleLoadMore = async () => {
-
         const nextPage = page + 1;
         const newRecipes = await fetchRecipes(nextPage);
         setPopular(prevRecipes => {
@@ -86,8 +80,6 @@ const RecipeList = () =>{
             });
             setPage(nextPage);
             };
-
-
 
     const handlePickedRecipe = (id) => {
         const recipe = popular.find(recipe => recipe.id === id);
@@ -122,7 +114,7 @@ const RecipeList = () =>{
                         handlePickedRecipe={() => handlePickedRecipe(recipe.id)}
                         setModalOpen={setModalOpen}
                         isAuthenticated={isAuthenticated}
-                        onAuthError={handleAuthError}
+
                     />
                     ))}
 
