@@ -4,6 +4,7 @@ import Profile from '../Profile/Profile'
 import RecipeList from '../RecipeList/RecipeList'
 import { useNavigate } from 'react-router-dom';
 import { CiHeart } from "react-icons/ci";
+import Footer from '../Footer/Footer';
 
 function HomePage({ setSearch }) {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ return(
     </header>
     <div className='recipeList'><RecipeList/></div> </div>
 
+    <div> <Footer /></div>
     </>
     )
 }

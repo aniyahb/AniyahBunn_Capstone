@@ -7,6 +7,7 @@ import { CiHome } from "react-icons/ci";
 import Profile from '../Profile/Profile';
 import FavoritesModal from '../FavoritesModal/FavoritesModal';
 import LoadingScreen from '../Loading/Loading';
+import Footer from '../Footer/Footer';
 
 const FavoriteRecipesPage = () => {
     const [favoriteRecipes, setFavoriteRecipes] = useState([]);
@@ -66,7 +67,8 @@ const FavoriteRecipesPage = () => {
 
 
         return (
-            <>
+            <div className="page-container">
+            <div className="content-wrap">
                 <header className='favoritePageHeader'>
                     <div className='favoritePageTitle'>
                     <Link to="/HomePage" className="home-icon" >
@@ -76,7 +78,6 @@ const FavoriteRecipesPage = () => {
                     </div>
                     <div className='profile'><span><Profile/></span></div>
                 </header>
-
                 {modalOpen && pickedRecipe &&
                     <FavoritesModal
                     pickedRecipe={pickedRecipe}
@@ -103,7 +104,9 @@ const FavoriteRecipesPage = () => {
                     ))}
                     </div>
                 </div>
-                </>
+                </div>
+                <Footer />
+            </div>
             );
     };
 

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
 import './SearchedPage.css'
 import LoadingScreen from "../Loading/Loading";
+import Footer from "../Footer/Footer";
 
 function SearchedPage(props){
     const [searchedRecipes, setSearchedRecipes] = useState ([])
@@ -90,21 +91,30 @@ function SearchedPage(props){
 }
 
     return(
-        <>
-        <div>
-        <header className='searchPageHeader'>
-        <div className='searchPageTitle'>
-            <Link to="/HomePage" className="home-icon" >
-                <CiHome />
-            </Link>
-            MealMaster</div>
-        <div className='profile'><span><Profile/></span></div>
-        </header>
+        <div className="page-container">
+        <div className="content-wrap">
+            <header className='searchPageHeader'>
+                <div className='searchPageTitle'>
+                    <Link to="/HomePage" className="home-icon" >
+                        <CiHome />
+                    </Link>
+                    MealMaster
+                </div>
+                <div className='profile'><span><Profile/></span></div>
+            </header>
 
-        {isLoading && <LoadingScreen />}
-        {modalOpen && pickedRecipe && <SearchedModal showModal={() => handleOpenModal(pickedRecipe)} pickedRecipe={pickedRecipe} closeModal={handleCloseModal} ingredients={pickedIngredients} instructions={pickedInstructions}/>}
+            {isLoading && <LoadingScreen />}
+            {modalOpen && pickedRecipe &&
+                <SearchedModal
+                    showModal={() => handleOpenModal(pickedRecipe)}
+                    pickedRecipe={pickedRecipe}
+                    closeModal={handleCloseModal}
+                    ingredients={pickedIngredients}
+                    instructions={pickedInstructions}
+                />
+            }
             <div className="recipe-list">
-                { searchedRecipes.map((recipe) => (
+                {searchedRecipes.map((recipe) => (
                     <RecipeCard
                         key={recipe.id}
                         id={recipe.id}
@@ -114,13 +124,14 @@ function SearchedPage(props){
                         cuisines={recipe.cuisines}
                         handlePickedRecipe={() => handlePickedRecipe(recipe.id)}
                         setModalOpen={setModalOpen}
-                        pickedIngredients = {pickedIngredients}
-                        pickedInstructions = {pickedInstructions}
+                        pickedIngredients={pickedIngredients}
+                        pickedInstructions={pickedInstructions}
                     />
-                    ))}
+                ))}
             </div>
-            </div>
-            </>
+        </div>
+        <Footer />
+    </div>
     )
 }
 export default SearchedPage;

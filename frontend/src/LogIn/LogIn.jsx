@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 import {useNavigate} from "react-router-dom"
 import LoadingScreen from '../Loading/Loading';
+import Footer from '../Footer/Footer';
 
 function LogIn(){
     const [email, setEmail] = useState('');
@@ -60,51 +61,49 @@ function LogIn(){
 
 //_________________________________________________________________
     return(
-        <>
-        <div>
-        {isLoading && <LoadingScreen />}
-
-        <div className='logInBody'>
-            <div className="logInTitle">MealMaster</div>
-            <div className='logInContainer'>
+        <div className="page-container">
+        <div className="content-wrap">
+            {isLoading && <LoadingScreen />}
+            <div className='logInBody'>
+                <div className="logInTitle">MealMaster</div>
+                <div className='logInContainer'>
                 <div className='logInHeader'>
                     <div className="logInLable">Login</div>
                     <div className="logInUnderline"></div>
                 </div>
-                    <form onSubmit={handleLogIn}>
-                        <div className='logInInputs'>
-
-                            <input
-                                type='email'
-                                placeholder='Email'
-                                value= {email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-
-                            <input
-                                type='password'
-                                placeholder='Password'
-                                value= {password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        {error && <div className='error'>{error}</div>}
-                        <p className='newAccount'>
-                            Don't have an account?{' '}
-                            <Link to= "/signUp" className='signUpLink'>
-                                Sign Up
-                            </Link>
-                        </p>
-                        <button className='logInButton' type="submit" disabled={loading}>
-                        {isLoading ? 'Logging in...' : 'Login'}
-                        </button>
-                    </form>
+                <form onSubmit={handleLogIn}>
+                    <div className='logInInputs'>
+                    <input
+                        type='email'
+                        placeholder='Email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <input
+                        type='password'
+                        placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    </div>
+                    {error && <div className='error'>{error}</div>}
+                    <p className='newAccount'>
+                    Don't have an account?{' '}
+                    <Link to="/signUp" className='signUpLink'>
+                        Sign Up
+                    </Link>
+                    </p>
+                    <button className='logInButton' type="submit" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Login'}
+                    </button>
+                </form>
+                </div>
             </div>
-    </div>
-    </div>
-</>
+            </div>
+            <Footer />
+        </div>
     )
 }
 

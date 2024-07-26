@@ -40,3 +40,13 @@
     flex-direction: row;
     margin-left: 20px;
 }
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrap {
+    flex: 1;
+}
