@@ -14,7 +14,7 @@ Market: Home Cooks, Busy people and families, Health -Conscious Customers, Food 
 
 Habit: Daily or Weekly, Season Variations
 
-Scope: Recipe Search/ Display, Meal Planning, Shopping List Generation, User Authentication, Profile Management, API and Database Integration
+Scope: Recipe Search/Display/Favoriting User Authentication, API and Database Integration
 
 ----------------------------------------------------------------------------
 
@@ -44,48 +44,44 @@ Load More Feature
 - Implement "Load More" button on the Homepage.
 - Develop backend pagination support for the "Load More" functionality.
 
-Technical Challenges
-1. Data Storage and Synchronization
-   - Store data in local storage.
-   - Implement read/write operations from/to local storage.
-   - Handle merging of data when differences are detected.
-
-2. Automatic User Notifications
-   - Create a cron job to automatically email users about updates to their favorited recipes.
-
+WALK THROUGH VIDEO:
+<div>
+    <a href="https://www.loom.com/share/6536778d16c743dfa9d206ec86cc11b3">
+      <p>Aniyah Bunn- MealMaster - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/6536778d16c743dfa9d206ec86cc11b3">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/6536778d16c743dfa9d206ec86cc11b3-0287f7e6765c5cdc-full-play.gif">
+    </a>
+  </div>
 
 ----------------------------------------------------------------------------
 
+## User Profile:
 
-## User Profiles:
+Registered User: Authenticated users who have created an account and logged in
 
-Guest User: Unauthenticated users who can look through recipes and use basic features 
-- Search for recipes
-- View recipes details 
-
-Registered User: Authenticated users who have created an account and logged in 
-- All guest user abilities 
-- Save favorite recipes 
-- Create and manage meal plans 
+- Search for recipes by keywords, ingredients, cuisine types, and dietary preferences
+- View recipe details including ingredients and instructions
+- Use the "Load More" feature on the Homepage to browse more recipes
+- Save and manage favorite recipes
+- Receive automatic email notifications about updates to favorited recipes
 
 ----------------------------------------------------------------------------
 
 ## User Stories:
-- As a guest user, I want to search for recipes so that I can find meal inspiration 
 
-- As a guest user, I want to view the details of a recipe so that I can see the ingredients and cooking instructions
+- As a user, I want to securely sign up and log in to my account so that I can access personalized features
+- As a user, I want to search for recipes using keywords, ingredients, cuisine types, or dietary preferences so that I can find specific meal ideas
+- As a user, I want to view detailed recipe information, including ingredients and instructions
+- As a user, I want to use the "Load More" button on the Homepage to browse additional recipes without leaving the page
+- As a user, I want to save my favorite recipes so that I can easily find them later
+- As a user, I want to remove recipes from my favorites list so that I can keep my saved recipes organized
+- As a user, I want to view all my favorite recipes on a dedicated page so that I can quickly access my preferred meals
+- As a user, I want to receive automatic email notifications about updates to my favorited recipes so that I'm aware of any changes or improvements
+- As a user, I want the app to store my data locally and synchronize it efficiently so that I have a seamless experience across sessions
+- As a user, I want the search results to be displayed on a new page so that I can easily compare different recipes
+- As a user, I want the app to handle data merging when differences are detected between local storage and server data so that my information remains consistent
 
-- As a guest user, I want to look through popular  recipes so that I can discover new foods to try 
-
-- As a guest user, I want to filter recipes by dietary preferences (e.g., vegetarian, gluten-free, haram)  so that I can find suitable options 
-
-- As a registered user, I want to save my favorite recipes so that I can easily find them later. 
-
-- As a registered user, I want to create meal plans for the week so that I can organize my meals ahead of time.
-
-- As a registered user, I want to edit my meal plan so that I can make changes if needed.
-
-- As a registered user, I want to log in and out of my account securely so that my personal data is protected. 
 
 ----------------------------------------------------------------------------
 ## Screen Archetypes
@@ -99,32 +95,34 @@ Registered User: Authenticated users who have created an account and logged in
 
 ----------------------------------------------------------------------------
 
-## Server Endpoints:
-| HTTP Verb | Name | Description | User Story | 
-------------|------|-------------|------------|
-POST | /LogIn | Logs in an existing user.| 10
-POST | /SignUp| Registers a new user. |10
-POST | /LogOut | Logs out the current user.| 10
-GET | /users | Retrieves the profile information of a user.| 9
-PUT | /users | Updates the profile information of a user | 9
-GET | /recipe_search | Searches for recipes based on query parameters. |1
-GET | /recipe | Retrieves details of a specific recipe. | 2
-GET | /recipe_popular | Retrieves a list of popular recipes. | 3
-GET | /recipr_filter | Filters recipes by dietary preferences. | 4
-POST | /meal_plans | Creates a new meal plan for the user. | 6
-GET | /meal_plans | Retrieves all meal plans for a specific user. | 6
-PUT | /meal_plans | Updates a specific meal plan | 8
-DELETE | /meal_plans | Deletes a specific meal plan. | 8
+## Server Endpoints
+
+| HTTP Verb | Endpoint | Description |
+|-----------|----------|-------------|
+| POST | `/signup` | Registers a new user |
+| POST | `/login` | Logs in an existing user |
+| GET | `/check-favorite/:recipeId` | Checks if a recipe is favorited by the user |
+| POST | `/add-favorite` | Adds a recipe to user's favorites |
+| DELETE | `/remove-favorite/:recipeId` | Removes a recipe from user's favorites |
+| GET | `/favorite-recipes` | Retrieves all favorite recipes for a user |
+
 
 ----------------------------------------------------------------------------
 ## Technical Challenges
 
+1. Data Storage and Synchronization
+   - Store data in local storage.
+   - Implement read/write operations from/to local storage.
+   - Handle merging of data when differences are detected.
+
+2. Automatic User Notifications
+   - Create a cron job to automatically email users about updates to their favorited recipes.
 
 ## Database Integration
-- Sequelize
+- Prisma
 
 ## External APIs
-- EDAMAM API
+- Spoonacular API
 
 ----------------------------------------------------------------------------
 ## Authentication
@@ -167,8 +165,6 @@ In MealMaster, user authentication ensures that registered users can securely ac
   Token Storage: The secure token (JWT) is stored on the client-side, either in an HttpOnly cookie or in local storage.
 
 
-----------------------------------------------------------------------------
-## Visuals and Interactions
 
 
 ----------------------------------------------------------------------------
