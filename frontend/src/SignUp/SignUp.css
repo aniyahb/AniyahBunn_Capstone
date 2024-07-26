@@ -37,7 +37,6 @@
     gap: 9px;
     width: 100%;
     margin-top: 30px;
-
 }
 
 .signUpLable{
@@ -91,8 +90,8 @@
     margin-top: 27px;
     color:#797979;
     font-size: 10px;
-
 }
+
 p{
     font-family: Didot, serif;
     font-size: 10px;
@@ -103,7 +102,6 @@ p{
     cursor:pointer;
     font-family: Didot, serif;
 }
-
 
 .signUpButton{
     background-color: rgb(2, 117, 2);

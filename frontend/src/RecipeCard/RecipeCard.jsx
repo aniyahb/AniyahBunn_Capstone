@@ -77,9 +77,6 @@ const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onA
                 }
             };
 
-
-
-
         return (
             <div className="recipeCard" onClick={handleClick}>
                 <div className='recipeContent'>
@@ -87,7 +84,6 @@ const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onA
                     <img className ="image" src= {image} />
                     <h2 className = "recipeName" > {title}</h2>
                     <div className='underName'>
-
                     <div className="cuisines">
                         {cuisines && cuisines.length > 0? cuisines[0] : ''}</div>
                     <div className= "favRecipe">

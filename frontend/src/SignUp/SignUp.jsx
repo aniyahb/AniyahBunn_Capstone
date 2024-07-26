@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import {useNavigate} from "react-router-dom"
 import Footer from '../Footer/Footer';
 
-
-
 function SignUp(){
     const navigate = useNavigate()
     const [name, setName] = useState('')
@@ -12,8 +10,6 @@ function SignUp(){
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
-
-
 
     async function handleSignUp(event){
         event.preventDefault();
@@ -24,7 +20,6 @@ function SignUp(){
             alert(error)
             return;
         }
-
 
         try{
             const response = await fetch("http://localhost:2500/signup",{
