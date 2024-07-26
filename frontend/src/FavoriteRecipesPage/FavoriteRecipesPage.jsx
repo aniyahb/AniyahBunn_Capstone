@@ -1,9 +1,9 @@
-import './FavoriteRecipesPage.css'
-import RecipeCard from '../RecipeCard/RecipeCard'
 import React, { useEffect, useState } from "react";
 import missingImage from "../assets/placeholder_img.jpeg";
 import { Link } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
+import './FavoriteRecipesPage.css'
+import RecipeCard from '../RecipeCard/RecipeCard'
 import Profile from '../Profile/Profile';
 import FavoritesModal from '../FavoritesModal/FavoritesModal';
 import LoadingScreen from '../Loading/Loading';
@@ -64,6 +64,11 @@ const FavoriteRecipesPage = () => {
         setPickedRecipe(null);
         };
 
+    const updateFavorites = (removedRecipeId) => {
+        setFavoriteRecipes(prevFavorites =>
+        prevFavorites.filter(recipe => recipe.id !== removedRecipeId)
+        );
+        };
 
         return (
             <div className="page-container">
@@ -99,6 +104,7 @@ const FavoriteRecipesPage = () => {
                         isAuthenticated={isAuthenticated}
                         onAuthError={handleAuthError}
                         setModalOpen={setModalOpen}
+                        updateFavorites={updateFavorites}
                         />
                     ))}
                     </div>
