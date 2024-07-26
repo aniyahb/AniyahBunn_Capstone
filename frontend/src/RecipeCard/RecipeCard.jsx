@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from 'react';
 
 
-const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onAuthError , handlePickedRecipe, setModalOpen  }) => {
+const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onAuthError , handlePickedRecipe, setModalOpen, updateFavorites  }) => {
     const [isFav, setIsFav] = useState(false);
     const key = id
     const token = localStorage.getItem('token');
@@ -53,6 +53,7 @@ const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onA
                     if (response.ok) {
                         console.log(`Recipe with ID ${id} was removed from favorites.`);
                         setIsFav(false);
+                        updateFavorites(recipeId);
                     } else {
                     throw new Error('Failed to remove favorite');
                     }
@@ -75,6 +76,9 @@ const RecipeCard = ({ id, image, title, cuisines, recipeId, isAuthenticated, onA
                     onAuthError("Failed to update favorite status");
                 }
             };
+
+
+
 
         return (
             <div className="recipeCard" onClick={handleClick}>

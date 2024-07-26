@@ -1,9 +1,9 @@
-import './FavoriteRecipesPage.css'
-import RecipeCard from '../RecipeCard/RecipeCard'
 import React, { useEffect, useState } from "react";
 import missingImage from "../assets/placeholder_img.jpeg";
 import { Link } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
+import './FavoriteRecipesPage.css'
+import RecipeCard from '../RecipeCard/RecipeCard'
 import Profile from '../Profile/Profile';
 import FavoritesModal from '../FavoritesModal/FavoritesModal';
 import LoadingScreen from '../Loading/Loading';
@@ -15,6 +15,9 @@ const FavoriteRecipesPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [pickedRecipe, setPickedRecipe] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const [pickedIngredients, setPickedIngredients] = useState(null);
+    const [pickedInstructions, setPickedInstructions] = useState(null);
 
 
     useEffect(() => {
@@ -54,9 +57,14 @@ const FavoriteRecipesPage = () => {
         console.log(message);
     };
 
-    const handlePickedRecipe = (recipe) => {
+    const handlePickedRecipe = async(recipe) => {
         setPickedRecipe(recipe);
         setModalOpen(true);
+
+        const ingredients = await getIngredientsById(recipe.id);
+        const instructions = await getInstructionsById(recipe.id);
+        setPickedIngredients(ingredients);
+        setPickedInstructions(instructions);
         };
 
     const handleCloseModal = () => {
@@ -64,6 +72,36 @@ const FavoriteRecipesPage = () => {
         setPickedRecipe(null);
         };
 
+    const updateFavorites = (removedRecipeId) => {
+        setFavoriteRecipes(prevFavorites =>
+        prevFavorites.filter(recipe => recipe.id !== removedRecipeId)
+        );
+        };
+
+
+        const getIngredientsById = async (id) => {
+            try {
+                const response = await fetch(`https://api.spoonacular.com/recipes/${id}/ingredientWidget.json?apiKey=${import.meta.env.VITE_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch ingredients');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching ingredients:', error.message);
+            }
+        };
+
+        const getInstructionsById = async (id) => {
+            try {
+                const response = await fetch(`https://api.spoonacular.com/recipes/${id}/analyzedInstructions?apiKey=${import.meta.env.VITE_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch instructions');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching instructions:', error.message);
+            }
+        };
 
         return (
             <div className="page-container">
@@ -81,6 +119,8 @@ const FavoriteRecipesPage = () => {
                     <FavoritesModal
                     pickedRecipe={pickedRecipe}
                     closeModal={handleCloseModal}
+                    ingredients={pickedIngredients}
+                    instructions={pickedInstructions}
                     />
                 }
                 <div className="favorite-recipes-page">
@@ -99,6 +139,7 @@ const FavoriteRecipesPage = () => {
                         isAuthenticated={isAuthenticated}
                         onAuthError={handleAuthError}
                         setModalOpen={setModalOpen}
+                        updateFavorites={updateFavorites}
                         />
                     ))}
                     </div>
