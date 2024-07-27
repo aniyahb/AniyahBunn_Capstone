@@ -85,13 +85,12 @@ Registered User: Authenticated users who have created an account and logged in
 
 ----------------------------------------------------------------------------
 ## Screen Archetypes
-<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/b5b723f5-023d-4f91-820d-af0cbb560920" width="450" height="250">
 
-<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/8ea3b187-3769-4b3a-8d3d-f1cea8409fdd" width="450" height="250">
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/8ea3b187-3769-4b3a-8d3d-f1cea8409fdd" width="400" height="200">
 
-<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/bc9fc72c-e0ea-4e0d-92e6-74f016cebba4" width="450" height="250">
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/bc9fc72c-e0ea-4e0d-92e6-74f016cebba4" width="400" height="200">
 
-<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/aa08f230-ff48-494f-868f-a96c874a25c5" width="450" height="250">
+<img src="https://github.com/aniyahb/AniyahBunn_Capstone/assets/114838551/aa08f230-ff48-494f-868f-a96c874a25c5" width="400" height="200">
 
 ----------------------------------------------------------------------------
 
@@ -164,8 +163,53 @@ In MealMaster, user authentication ensures that registered users can securely ac
   Session Management with JWT
   Token Storage: The secure token (JWT) is stored on the client-side, either in an HttpOnly cookie or in local storage.
 
+______________________________________
+## Visuals and Interactions
 
+- Interesting Cursor Interaction: Hovering over recipe cards, favorite icon, home icon
 
+- UI Component with Custom Visual Styling: Footer containing contact information with cooresponding linked icons
+
+- Loading State: Loading screen used when navigating between pages, fetching user's favorites, and searching for recipes.
+
+_______________________________________
+## Timeline
+
+**Week 5: July 1 - July 7**
+
+User Authentication 
+- Implement sign-up and login functionality.
+
+**Week 6: July 8 - July 14**
+
+Recipe Finder and Display
+- Integrate API into the project.
+- Design and implement UI for displaying recipe details (ingredients, instructions, cooking time, nutritional facts).
+- Implement recipe search functionality (by keywords, ingredients, cuisine types, dietary preferences).
+- Enable users to save favorite recipes.
+
+**Week 7: July 15 - July 21**
+
+Favorite Recipes
+- Design and develop UI for favoriting page.
+- Implement functionality to add and remove meals from the favorites.
+
+Search Feature
+- Design and implement a search bar in the user interface.
+- Develop backend functionality to process search queries.
+- Implement search results display and navigate to a new page.
+
+Load More Feature
+- Implement the "Load More" button on the Homepage.
+- Develop backend pagination support for the "Load More" functionality.
+
+**Week 8: July 22 - July 26**
+
+Technical Challenge 1 
+- Store data in local storage, and when you fetch data, ensure that you write / read from local storage. If the data is different, handle the merging. 
+
+Technical Challenge 2
+- Create a cron job to automatically email users on updates of their favorited recipes.
 
 ----------------------------------------------------------------------------
 
