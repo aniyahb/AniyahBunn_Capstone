@@ -128,7 +128,7 @@ Registered User: Authenticated users who have created an account and logged in
 
 ----------------------------------------------------------------------------
 ## Authentication
-In MealMaster, user authentication ensures that registered users can securely access their personal features, while guest users can explore basic functionalities. Here's a simplified description of how user authentication is managed, including session and cookie management, and its effect on navigation between different screens.
+In MealMaster, user authentication ensures that registered users can securely access their personal features. Here's a simplified description of how user authentication is managed, including session and cookie management, and its effect on navigation between different screens.
 
 **Sign Up Process:**
 
