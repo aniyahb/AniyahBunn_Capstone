@@ -10,7 +10,7 @@ Category: Food, Meal Planning
 
 Story: Many People struggle with planning meals, finding new recipes, and organizing shopping lists effectively. This often leads to repetitive meals, wasted food, and unnecessary stress in the kitchen. 
 
-Market: Home Cooks, Busy people and families, Health -Conscious Customers, Food Enthusiasts
+Market: Home Cooks, Busy people and families, Health-Conscious Customers, Food Enthusiasts
 
 Habit: Daily or Weekly, Season Variations
 
