@@ -116,11 +116,14 @@ Registered User: Authenticated users who have created an account and logged in
 
 2. Automatic User Notifications
    - Create a cron job to automatically email users about updates to their favorited recipes.
+     
+**Database Integration**
 
-## Database Integration
+- PostgresSQL
 - Prisma
 
-## External APIs
+ **External APIs**
+ 
 - Spoonacular API
 
 ----------------------------------------------------------------------------
